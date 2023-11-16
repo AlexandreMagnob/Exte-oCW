@@ -53,7 +53,7 @@ class ScrapyAnotai {
       async checkRepetition(complementExpandable) {
         const chooserDiv = complementExpandable.querySelector('.chooser-select.w-20');
         const plusButton = chooserDiv.querySelectorAll('button.btn.radius-1.font-10.no-user-select.btn-container')[1];      
-        plusButton.click();
+        plusButton.click(); 
         plusButton.click();
         await this.sleep(200)
         const counter = chooserDiv.querySelector('.px-2.font-3.row-center');
