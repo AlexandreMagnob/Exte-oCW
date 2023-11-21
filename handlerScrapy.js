@@ -4,6 +4,7 @@ class HandlerScrapy {
       this.scrapyDino = new ScrapyDino();
       this.scrapyAnotai = new ScrapyAnotai();
       this.scrapyGoomer = new ScrapyGoomer();
+      this.scrapyOlaClick = new ScrapyOlaClick();
     }
   
     async handleScrapyChoice(restaurante) {
