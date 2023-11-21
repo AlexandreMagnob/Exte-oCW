@@ -3,6 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <title>Popup</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    select {
+      width: 200px;
+      padding: 8px;
+      font-size: 14px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #FF4136; /* Vermelho */
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #E70010; /* Tom mais escuro de vermelho ao passar o mouse */
+    }
+  </style>
   <script src="popup.js"></script>
 </head>
 <body>
@@ -11,7 +48,8 @@
     <option value="Dino">Menu Dino</option>
     <option value="Anotai">Anotai</option>
     <option value="Goomer">Goomer</option>
-  </select> 
+  </select>
+  <br>
   <button id="coletarDados">Coletar Dados</button>
 </body>
 </html>
