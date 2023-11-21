@@ -21,7 +21,8 @@
     {
       "matches": [
         "https://*.anota.ai/*",
-        "https://*.menudino.com/*"
+        "https://*.menudino.com/*",
+        "https://*.goomer.app/*"
       ],
       "js": [
         "papaparse.min.js",

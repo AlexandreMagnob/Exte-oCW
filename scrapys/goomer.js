@@ -3,6 +3,7 @@ class ScrapyGoomer {
     constructor() {
       this.scrapedData = [];
       this.titleRestaurant = ""
+      
     }
   
     sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)); }
@@ -55,6 +56,9 @@ class ScrapyGoomer {
     async clickProductCards() {
       console.log("executando..")
       await this.sleep(500)
+
+      this.titleRestaurant = (document.querySelector('.sc-msiz1g-0 strong') || {}).textContent || '';
+
       let categoryDivs = document.querySelectorAll('.sc-4uh17g-0');
     
       for await (const categoryIndex of [...Array(categoryDivs.length).keys()]) {

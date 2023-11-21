@@ -73,7 +73,9 @@ async function createCSV(data, name) {
     a.style.display = 'none';
     a.href = url;
 
+
     const fileName = name !== "" ? name : "planilha_produto";
+    alert(fileName)
 
     a.download = `${fileName}.csv`; // Nome do arquivo de download
   
