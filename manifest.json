@@ -28,6 +28,7 @@
         "papaparse.min.js",
         "scrapys/anotai.js",  
         "scrapys/menudino.js",
+        "scrapys/goomer.js",
         "handlerScrapy.js",
         "sheet_generation.js"
       ],

@@ -9,8 +9,8 @@ class ScrapyGoomer {
     sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)); }
     
 
-    async checkRepetition(optionElement) {
-      let button = optionElement.querySelector('button');
+    async checkRepetition(complementExpandable) {
+      let button = complementExpandable.querySelector('button, .action');
       if (button) {
         return "com repeticao";
       } else {
@@ -58,7 +58,7 @@ class ScrapyGoomer {
       await this.sleep(500)
 
       this.titleRestaurant = (document.querySelector('.sc-msiz1g-0 strong') || {}).textContent || '';
-
+      console.log(this.titleRestaurant)
       let categoryDivs = document.querySelectorAll('.sc-4uh17g-0');
     
       for await (const categoryIndex of [...Array(categoryDivs.length).keys()]) {
@@ -68,13 +68,8 @@ class ScrapyGoomer {
         let categoryNameElement = categoryDiv.querySelector('h2')
         let categoryName = categoryNameElement ? categoryNameElement.textContent : "";
         
-        if (categoryName.includes('app') || categoryName.includes('baixe')) {
-          console.log('Categoria ignorada:', categoryName);
-          continue; // Pula para a próxima iteração do loop
-        }
-
         let productCards = categoryDiv.querySelectorAll('[data-test="product-item"]')
-  
+
         console.log(categoryName)
         console.log(productCards.length)
   
@@ -87,10 +82,12 @@ class ScrapyGoomer {
           let productCard = productCards[productIndex];
           
           console.log({productIndex, productCard})
-  
+          
+          productCard.scrollIntoView()
+          productCard.click()
 
             // Agora, vamos adicionar um atraso antes de coletar os dados.
-            await this.sleep(1000)
+            await this.sleep(1500)
             let productModal = document.querySelector('.sc-1w3vq2h-2');
             let titleElement = productModal.querySelector('.name');
             console.log(titleElement)
@@ -107,7 +104,7 @@ class ScrapyGoomer {
             let complementsDict = []
             let complementExpandables = document.querySelectorAll('[data-test="optional-items-list"]');
             for await (const complementExpandable of complementExpandables) {
-              let complementElements = complementExpandable.querySelectorAll('[data-test="optional-items-list"]')
+              let complementElements = complementExpandable.querySelectorAll('.sc-470djk-0')
               let optionsComplement = [];
               // Pegar o nome de cada complemento
               for await (const complementElement of complementElements) {
@@ -130,7 +127,15 @@ class ScrapyGoomer {
                   let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
                   let optionDescription = optionTitle.includes('-') ? optionTitle.split('-')[1].trim() : "";
 
-                  console.log([optionTitle, optionPrice, optionDescription])
+                  console.log("- - - - - - - - - - - - - - - - - ")
+                  console.log("NOME DO COMPLEMENTO: ",complementName)
+                  console.log("TEXTO DO TIPO DO COMPLEMENTO: ",typeComplementText.trim())
+                  console.log("TIPO DO COMPLEMENT: ",typeComplement)
+                  console.log("QUANTIDADE MIN: ",minQtd)
+                  console.log("QUANTIDADE MAX: ",maxQtd)
+                  console.log("OPÇOES: ",optionsComplement)
+                  console.log("- - - - - - - - - - - - - - - - - ")
+                  console.log("                                  ")
 
                   optionsComplement.push({
                     optionTitle: optionTitle,
@@ -146,6 +151,7 @@ class ScrapyGoomer {
                   maxQtd: maxQtd,
                   options: optionsComplement
                 })
+
               }
             }
     

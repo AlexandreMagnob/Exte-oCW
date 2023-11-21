@@ -23,6 +23,7 @@ class HandlerScrapy {
         await createCSV(scrapedData, titleRestaurant)
       } 
       else if (restaurante == "Goomer"){
+        await this.scrapyGoomer.clickProductCards()
         const scrapedData = this.scrapyGoomer.scrapedData
         alert("Finalizado")
         const titleRestaurant = this.scrapyGoomer.titleRestaurant
