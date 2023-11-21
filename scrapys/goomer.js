@@ -24,7 +24,7 @@ class ScrapyGoomer {
       let minQtd = 0;
       let maxQtd = 0;
     
-      if (complement.match(/^Escolha (\d+) itens/)) {
+      if (complement.match(/^Escolha (\d+) opções/)) {
         const itemCount = parseInt(complement.match(/^Escolha (\d+) opções/)[1], 10);
         if (itemCount !== 1) {
           type = 'Mais de uma opcao ' + repetition;
@@ -63,10 +63,12 @@ class ScrapyGoomer {
         let categoryDiv = categoryDivs[categoryIndex];
         let categoryNameElement = categoryDiv.querySelector('h2')
         let categoryName = categoryNameElement ? categoryNameElement.textContent : "";
-    
-        //Expande a categoria de produtos
-        await this.expandCategory(categoryDiv)
         
+        if (categoryName.includes('app') || categoryName.includes('baixe')) {
+          console.log('Categoria ignorada:', categoryName);
+          continue; // Pula para a próxima iteração do loop
+        }
+
         let productCards = categoryDiv.querySelectorAll('[data-test="product-item"]')
   
         console.log(categoryName)
@@ -122,6 +124,9 @@ class ScrapyGoomer {
                   let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
                   let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                  let optionDescription = optionTitle.includes('-') ? optionTitle.split('-')[1].trim() : "";
+
+                  console.log([optionTitle, optionPrice, optionDescription])
 
                   optionsComplement.push({
                     optionTitle: optionTitle,
@@ -162,7 +167,7 @@ class ScrapyGoomer {
   async backPage() {
     console.log("Voltou!")
     await this.sleep(1000);
-    let back = document.querySelector('.modal-dialog .fa-chevron-left');
+    let back = document.querySelector('[data-test="btn-back"]');
     if (back) {
       back.click()
   }

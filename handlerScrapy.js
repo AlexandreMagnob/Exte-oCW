@@ -3,6 +3,7 @@ class HandlerScrapy {
       // Inicializa as instâncias dos scrapers
       this.scrapyDino = new ScrapyDino();
       this.scrapyAnotai = new ScrapyAnotai();
+      this.scrapyGoomer = new ScrapyGoomer();
     }
   
     async handleScrapyChoice(restaurante) {
@@ -20,7 +21,15 @@ class HandlerScrapy {
         alert("Finalizado")
         const titleRestaurant = this.scrapyAnotai.titleRestaurant
         await createCSV(scrapedData, titleRestaurant)
-      } else {
+      } 
+      else if (restaurante == "Goomer"){
+        const scrapedData = this.scrapyGoomer.scrapedData
+        alert("Finalizado")
+        const titleRestaurant = this.scrapyGoomer.titleRestaurant
+        await createCSV(scrapedData, titleRestaurant)
+      }
+      
+      else {
         console.error('Restaurante inválido');
       }
     }
