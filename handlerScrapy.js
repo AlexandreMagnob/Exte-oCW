@@ -29,7 +29,13 @@ class HandlerScrapy {
         const titleRestaurant = this.scrapyGoomer.titleRestaurant
         await createCSV(scrapedData, titleRestaurant)
       }
-      
+      else if (restaurante === 'OlaClick') {
+        await this.scrapyOlaClick.clickProductCards()
+        const scrapedData = this.scrapyOlaClick.scrapedData
+        alert("Finalizado")
+        const titleRestaurant = this.scrapyOlaClick.titleRestaurant
+        await createCSV(scrapedData, titleRestaurant)
+      }
       else {
         console.error('Restaurante inválido');
       }

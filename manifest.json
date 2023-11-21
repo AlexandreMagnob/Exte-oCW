@@ -22,12 +22,14 @@
       "matches": [
         "https://*.anota.ai/*",
         "https://*.menudino.com/*",
-        "https://*.goomer.app/*"
+        "https://*.goomer.app/*",
+        "https://*.ola.click/*"
       ],
       "js": [
         "papaparse.min.js",
         "scrapys/anotai.js",  
         "scrapys/menudino.js",
+        "scrapys/olaclick.js",
         "scrapys/goomer.js",
         "handlerScrapy.js",
         "sheet_generation.js"
