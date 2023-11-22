@@ -15,7 +15,7 @@ class ScrapyDino {
       let maxQtd = ""
 
       if (typeOption && typeOption.classList) {
-        if (typeOption.classList.contains('radio')) {
+        if (typeOption.classList.containfs('radio')) {
           type = "Apenas uma opcao";
           minQtd = 0;
           maxQtd = 1;
@@ -72,7 +72,11 @@ class ScrapyDino {
         }
       }
     }
-
+    async extractSinglePrice(text) {
+      const regex = /R\$(\d+(?:,\d{2})?)/;
+      const match = text.match(regex);
+      return match ? match[1] : "0.00";
+    }
 
   async clickProductCards() {
     console.log("executando..")
@@ -105,13 +109,13 @@ class ScrapyDino {
         console.log({productIndex, productCard})
 
         let priceElement = productCard.querySelector('.price');
-  
+        
+        productCard.scrollIntoView();
         let innerDiv = productCard.querySelector('.product-item');
         if (innerDiv) {
           await this.sleep(500)
-          innerDiv.scrollIntoView()
           innerDiv.click();
-
+          
           // Agora, vamos adicionar um atraso antes de coletar os dados.
           await this.sleep(1000)
           let productModal = document.querySelector('.modal-dialog');
@@ -122,7 +126,14 @@ class ScrapyDino {
           let productTitle = titleElement ? titleElement.textContent : "";
           console.log(productTitle)
           let priceText = priceElement ? priceElement.textContent : "";
-          let productPrice = priceText.replace(/[^\d,.]/g, '').replace('.', ',')
+          let productPrice = "0"
+          if (priceText.includes("a")) {
+            // Se for um intervalo, defina o preço como zero
+            productPrice = "0";
+          } else {
+            // Se for um preço único, extraia o valor normal
+            productPrice = extractSinglePrice(priceText);
+          }
           let imgSrc = imgElement ? imgElement.src : "";
           let productDescricao = descricaoElement ? descricaoElement.textContent : "";
   
