@@ -9,6 +9,18 @@ class scrapyInstaDelivery {
     sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)); }
     
 
+    async getPriceProduct(priceText){
+      let multiplePrices = priceText.includes('\n');
+      let productPrice;
+      if (multiplePrices) {
+        let priceElements = priceText.split('\n').map(e => e.trim()).filter(Boolean);
+        productPrice = priceElements[0].replace(/[^\d,.]/g, '').replace('.', ',');
+      } else {
+        productPrice = priceText.replace(/[^\d,.]/g, '').replace('.', ',');
+      }
+      return productPrice;
+    }
+
     async checkRepetition(complementExpandable) {
       let button = complementExpandable.querySelector('button, .action');
       if (button) {
@@ -52,6 +64,11 @@ class scrapyInstaDelivery {
       }
       return [type, minQtd, maxQtd];
     }
+
+    async cleanUpText(text) {
+      // Remove espaços extras, quebras de linha e remove o texto entre parênteses
+      return text.trim().replace(/\s+/g, ' ').replace(/\([^)]*\)/g, '');
+    }
   
     async clickProductCards() {
       console.log("executando..")
@@ -89,7 +106,6 @@ class scrapyInstaDelivery {
           await this.sleep(500)
           productCard.click()
 
-            // Agora, vamos adicionar um atraso antes de coletar os dados.
             await this.sleep(1500)
             let productModal = document.querySelector('.modal-content');
             let titleElement = productModal.querySelector('.itemName');
@@ -97,37 +113,37 @@ class scrapyInstaDelivery {
             let imgElement = productModal.querySelector('img[alt="Item image"]')
             let descricaoElement = productModal.querySelector('.item-description')
             let productTitle = titleElement ? titleElement.textContent : "";
-            console.log(productTitle)
-            let priceText = priceElement ? priceElement.textContent : "";
-            let productPrice = priceText.replace(/[^\d,.]/g, '').replace('.', ',')
+            let priceText = priceElement.textContent.trim();
+            let productPrice = await this.getPriceProduct(priceText);
             let imgSrc = imgElement ? imgElement.src : "";
             let productDescricao = descricaoElement ? descricaoElement.textContent : "";
-    
+
             let complementsDict = []
-            let complementExpandables = document.querySelectorAll('[data-test="optional-items-list"]');
+            let complementExpandables = productModal.querySelectorAll(".col-md-12.complement")
+
             for await (const complementExpandable of complementExpandables) {
-              let complementElements = complementExpandable.querySelectorAll('.sc-470djk-0')
+              let complementElements = complementExpandable.querySelectorAll('.complement-font')
               let optionsComplement = [];
               // Pegar o nome de cada complemento
               for await (const complementElement of complementElements) {
-                let complementNameElement = complementElement.querySelector('.title');
-                let typeComplementElement = complementElement.querySelector('.tip');
-                let typeComplementText = typeComplementElement ? typeComplementElement.textContent : "";
+
+                let complementNameElement = complementElement.textContent
+                let complementTypeElement = complementElement.
                 let [typeComplement, minQtd, maxQtd] = await this.processTypeComplement(typeComplementText, complementExpandable);
                 console.log([typeComplement, minQtd, maxQtd])
-                let complementName = complementNameElement ? complementNameElement.textContent : "";
+                let complementName = complementNameElement ? cleanUpText(complementNameElement) : "";
                 
                 // Pegar nome de cada opção do complemento da iteração
-                let optionsElement = complementExpandable.querySelectorAll('.sc-zh9q04-0');
+                let optionsElement = complementExpandable.querySelectorAll('.form-check');
                 for await (const optionElement of optionsElement) {
 
-                  let optionTitleElement = optionElement.querySelector('.description');
-                  let optionPriceElement = optionElement.querySelector('.value');
+                  let optionTitleElement = optionElement.querySelector('.item-complement');
+                  let optionPriceElement = optionElement.querySelector('.sub-item-price')
 
                   let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
                   let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
-                  let optionDescription = optionTitle.includes('-') ? optionTitle.split('-')[1].trim() : "";
+                  let optionDescription = "";
 
                   console.log("- - - - - - - - - - - - - - - - - ")
                   console.log("NOME DO COMPLEMENTO: ",complementName)
