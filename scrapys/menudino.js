@@ -106,7 +106,7 @@ class ScrapyDino {
 
         let priceElement = productCard.querySelector('.price');
   
-        let produtCard = productCard.querySelector('.product-item');
+        let innerDiv = productCard.querySelector('.product-item');
         if (innerDiv) {
           await this.sleep(500)
           innerDiv.scrollIntoView()

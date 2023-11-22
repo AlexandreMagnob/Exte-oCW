@@ -31,6 +31,7 @@
         "scrapys/menudino.js",
         "scrapys/olaclick.js",
         "scrapys/goomer.js",
+        "scrapys/instadelivery.js",
         "handlerScrapy.js",
         "sheet_generation.js"
       ],
