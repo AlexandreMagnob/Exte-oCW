@@ -84,6 +84,7 @@ class ScrapyGoomer {
           console.log({productIndex, productCard})
           
           productCard.scrollIntoView()
+          await this.sleep(500)
           productCard.click()
 
             // Agora, vamos adicionar um atraso antes de coletar os dados.
@@ -111,7 +112,7 @@ class ScrapyGoomer {
                 let complementNameElement = complementElement.querySelector('.title');
                 let typeComplementElement = complementElement.querySelector('.tip');
                 let typeComplementText = typeComplementElement ? typeComplementElement.textContent : "";
-                let [typeComplement, minQtd, maxQtd] = await this.processTypeComplement(complementExpandable, typeComplementText);
+                let [typeComplement, minQtd, maxQtd] = await this.processTypeComplement(typeComplementText, complementExpandable);
                 console.log([typeComplement, minQtd, maxQtd])
                 let complementName = complementNameElement ? complementNameElement.textContent : "";
                 
