@@ -109,6 +109,7 @@ class ScrapyDino {
         let produtCard = productCard.querySelector('.product-item');
         if (innerDiv) {
           await this.sleep(500)
+          innerDiv.scrollIntoView()
           innerDiv.click();
 
           // Agora, vamos adicionar um atraso antes de coletar os dados.

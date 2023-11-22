@@ -5,6 +5,7 @@ class HandlerScrapy {
       this.scrapyAnotai = new ScrapyAnotai();
       this.scrapyGoomer = new ScrapyGoomer();
       this.scrapyOlaClick = new ScrapyOlaClick();
+      this.scrapyInstaDelivery = new scrapyInstaDelivery();
     }
   
     async handleScrapyChoice(restaurante) {
@@ -35,6 +36,13 @@ class HandlerScrapy {
         const scrapedData = this.scrapyOlaClick.scrapedData
         alert("Finalizado")
         const titleRestaurant = this.scrapyOlaClick.titleRestaurant
+        await createCSV(scrapedData, titleRestaurant)
+      }
+      else if (restaurante === 'InstaDelivery') {
+        await this.scrapyInstaDelivery.clickProductCards()
+        const scrapedData = this.scrapyInstaDelivery.scrapedData
+        alert("Finalizado")
+        const titleRestaurant = this.scrapyInstaDelivery.titleRestaurant
         await createCSV(scrapedData, titleRestaurant)
       }
       else {
