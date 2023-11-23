@@ -29,46 +29,112 @@ class scrapyInstaDelivery {
         return "sem repeticao";
       }
     }
-
-    async processTypeComplement(typeComplement, complementExpandable) {
-      const complement = typeComplement !== "" ? typeComplement : "";
-      let repetition = await this.checkRepetition(complementExpandable);
-      let type = "";
-      let minQtd = 0;
-      let maxQtd = 0;
     
-      if (complement.match(/^Escolha (\d+) opções/)) {
-        const itemCount = parseInt(complement.match(/^Escolha (\d+) opções/)[1], 10);
-        if (itemCount !== 1) {
-          type = 'Mais de uma opcao ' + repetition;
-          minQtd = itemCount;
-          maxQtd = itemCount;
-          console.log(minQtd,maxQtd)}
-      }else if(complement == "Escolha 1 opção"){
-        type = "Apenas uma opcao";
-        minQtd = 1;
-        maxQtd = 1;
+
+    async getComplementQuantityRequired(complementType) {
+      // Remover parênteses e espaços extras
+      let cleanedType = complementType.replace(/[()]/g, '').trim();
+    
+      // Identificar se é Obrigatório ou Opcional
+      let isOptional = cleanedType.toLowerCase().includes('opcional');
+    
+      // Encontrar os números presentes na string
+      let matches = cleanedType.match(/(\d+)/g);
+    
+      // Definir maxQuantity baseado nos matches
+      let maxQuantity = matches ? parseInt(matches[matches.length - 1], 10) : 1;
+      let minQuantity = 0
+      if(!isOptional){
+        minQuantity = maxQuantity
       }
-      else if (complement.startsWith("Escolha até ")) {
-        const maxItems = parseInt(complement.match(/\d+/)[0], 10);
-        type = 'Mais de uma opcao ' + repetition;
-        minQtd = 0
-        maxQtd = maxItems;
-      } else if (complement.match(/^Escolha de \d+ até \d+ opções$/)) {
-        const minMaxItems = complement.match(/\d+/g);
-        const minItems = parseInt(minMaxItems[0], 10);
-        const maxItems = parseInt(minMaxItems[1], 10);
-        type = 'Mais de uma opcao ' + repetition;
-        minQtd = minItems;
-        maxQtd = maxItems;
+      return {
+        isOptional: isOptional,
+        minQuantity: minQuantity,
+        maxQuantity: maxQuantity
+      };
+    }
+    async getComplementType(complementExpandable, Quantity){
+      let hasButton = complementExpandable.querySelector('.update-button')
+      let repetion
+      let type
+      if(Quantity>1){
+        type = "Mais de uma opcao"
       }
-      return [type, minQtd, maxQtd];
+      else{
+        type = "Apenas uma opcao"
+      }
+      if (hasButton){
+        repetion = "com repeticao"
+      }
+      else {
+        repetion = "sem repeticao"
+      }
+      return type + repetion;
+    }
+
+    async processComplements(productModal) {
+      let complementsDict = []
+      let complementExpandables = productModal.querySelectorAll(".col-md-12.complement");
+      for await (const complementExpandable of complementExpandables) {
+        let complementElements = complementExpandable.querySelectorAll('.complement-font');
+        let optionsComplement = [];
+        // Pegar o nome de cada complemento
+        for await (const complementElement of complementElements) {
+
+          let complementNameElement = complementElement.textContent
+          //Separa o nome do complemento do seu tipo e.g : (Obrigatório) 0/2 
+          let [complementName, complementType] = await this.cleanUpText(complementNameElement.textContent);
+          //Captura a quantidade de opções e se a opção é obrigatória ou não
+          let [isRequired, minQtd, maxQtd] = await this.getComplementQuantityRequired(typeComplementText);
+          //Verifica se tem repetição e o tipo 'mais de uma opcao' ou não.
+          let typeComplement = await this.getComplementType(complementExpandable, maxQtd) 
+          console.log([typeComplement, minQtd, maxQtd])
+          
+          // Pegar nome de cada opção do complemento da iteração
+          let optionsElement = complementExpandable.querySelectorAll('.form-check');
+          for await (const optionElement of optionsElement) {
+
+            let optionTitleElement = optionElement.querySelector('.item-complement');
+            let optionPriceElement = optionElement.querySelector('.sub-item-price')
+
+            let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
+            let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
+            let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+            let optionDescription = "";
+                
+          }
+        }
+      }
+    }
+    
+    async calculateComplements(productModal) {
+      // Busque o botão "Avançar" dentro do productModal
+      let avancarButton = productModal.querySelector('.add-cart-button:contains("Avançar")');
+    
+      while (avancarButton) {
+        // Se o botão "Avançar" estiver disponível, clique nele
+        avancarButton.click();
+        await processComplements(productModal);
+        // Busque novamente o botão "Avançar" dentro do productModal
+        avancarButton = productModal.querySelector('.add-cart-button:contains("Avançar")');
+      }
     }
 
     async cleanUpText(text) {
-      // Remove espaços extras, quebras de linha e remove o texto entre parênteses
-      return text.trim().replace(/\s+/g, ' ').replace(/\([^)]*\)/g, '');
-    }
+    // Remove espaços extras e quebras de linha
+    let cleanedText = text.trim().replace(/\s+/g, ' ');
+
+    // Encontrar o texto entre parênteses
+    let matches = cleanedText.match(/\(([^)]*)\)/);
+
+    // Se houver correspondências, extraia o texto entre parênteses
+    let complementType = matches ? matches[1] : '';
+
+    // Remova o texto entre parênteses de cleanedText
+    cleanedText = cleanedText.replace(/\([^)]*\)/g, '');
+
+    return [cleanedText.trim(), complementType.trim()];
+}
   
     async clickProductCards() {
       console.log("executando..")
@@ -119,19 +185,8 @@ class scrapyInstaDelivery {
             let productDescricao = descricaoElement ? descricaoElement.textContent : "";
 
             let complementsDict = []
-            let complementExpandables = productModal.querySelectorAll(".col-md-12.complement")
-
-            for await (const complementExpandable of complementExpandables) {
-              let complementElements = complementExpandable.querySelectorAll('.complement-font')
-              let optionsComplement = [];
-              // Pegar o nome de cada complemento
-              for await (const complementElement of complementElements) {
-
-                let complementNameElement = complementElement.textContent
-                let complementTypeElement = complementElement.
-                let [typeComplement, minQtd, maxQtd] = await this.processTypeComplement(typeComplementText, complementExpandable);
-                console.log([typeComplement, minQtd, maxQtd])
-                let complementName = complementNameElement ? cleanUpText(complementNameElement) : "";
+            
+                
                 
                 // Pegar nome de cada opção do complemento da iteração
                 let optionsElement = complementExpandable.querySelectorAll('.form-check');
@@ -160,7 +215,7 @@ class scrapyInstaDelivery {
                     optionPrice: optionPrice,
                     optionDescription: optionDescription
                   });
-                }
+                
     
                 complementsDict.push({
                   nameComplement: complementName,
@@ -169,8 +224,6 @@ class scrapyInstaDelivery {
                   maxQtd: maxQtd,
                   options: optionsComplement
                 })
-
-              }
             }
     
             productData.push({
