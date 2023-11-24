@@ -6,7 +6,6 @@
   "permissions": [
     "activeTab",
     "storage",
-    "scripting",
     "webNavigation"
   ],
   "action": {
@@ -23,17 +22,19 @@
         "https://*.anota.ai/*",
         "https://*.menudino.com/*",
         "https://*.goomer.app/*",
-        "https://*.ola.click/*"
+        "https://*.ola.click/*",
+        "https://instadelivery.com.br/*"
       ],
       "js": [
         "papaparse.min.js",
-        "scrapys/anotai.js",  
+        "scrapys/anotai.js",
         "scrapys/menudino.js",
         "scrapys/olaclick.js",
         "scrapys/goomer.js",
         "scrapys/instadelivery.js",
         "handlerScrapy.js",
-        "sheet_generation.js"
+        "sheet_generation.js",
+        "puppeteer-core.js"
       ],
       "all_frames": true
     }

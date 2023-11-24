@@ -3,12 +3,12 @@ class scrapyInstaDelivery {
     constructor() {
       this.scrapedData = [];
       this.titleRestaurant = ""
-      
-    }
-  
-    sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)); }
-    
 
+    }
+
+    sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)); }
+
+    // [*]  Função responsável por pegar o preço do produto; em caso de promoções, pegar o preço original.
     async getPriceProduct(priceText){
       let multiplePrices = priceText.includes('\n');
       let productPrice;
@@ -20,39 +20,23 @@ class scrapyInstaDelivery {
       }
       return productPrice;
     }
-
-    async checkRepetition(complementExpandable) {
-      let button = complementExpandable.querySelector('button, .action');
-      if (button) {
-        return "com repeticao";
-      } else {
-        return "sem repeticao";
-      }
-    }
-    
-
+    // [*]  Função responsável por determinar as quantidades max, min das opções de cada complemento
     async getComplementQuantityRequired(complementType) {
       // Remover parênteses e espaços extras
       let cleanedType = complementType.replace(/[()]/g, '').trim();
-    
       // Identificar se é Obrigatório ou Opcional
       let isOptional = cleanedType.toLowerCase().includes('opcional');
-    
       // Encontrar os números presentes na string
       let matches = cleanedType.match(/(\d+)/g);
-    
       // Definir maxQuantity baseado nos matches
       let maxQuantity = matches ? parseInt(matches[matches.length - 1], 10) : 1;
       let minQuantity = 0
       if(!isOptional){
         minQuantity = maxQuantity
       }
-      return {
-        isOptional: isOptional,
-        minQuantity: minQuantity,
-        maxQuantity: maxQuantity
-      };
+      return [isOptional,minQuantity,maxQuantity];
     }
+    // [*] Função responsável por verificar o tipo do complemento (sua repetição, multiplicidade)
     async getComplementType(complementExpandable, Quantity){
       let hasButton = complementExpandable.querySelector('.update-button')
       let repetion
@@ -64,15 +48,28 @@ class scrapyInstaDelivery {
         type = "Apenas uma opcao"
       }
       if (hasButton){
-        repetion = "com repeticao"
+        repetion = " com repeticao"
       }
       else {
-        repetion = "sem repeticao"
+        repetion = " sem repeticao"
       }
       return type + repetion;
     }
-
+    
+    // [*] Função responsável por separar o nome do complemento do seu tipo
+    async cleanUpText(text) { 
+    // Remove espaços extras e quebras de linha
+    let cleanedText = text.trim().replace(/\s+/g, ' ');
+    // Encontrar o texto entre parênteses
+    let matches = cleanedText.match(/\(([^)]*)\)/);
+    // Se houver correspondências, extraia o texto entre parênteses
+    let complementType = matches ? matches[1] : '';
+    // Remova o texto entre parênteses de cleanedText
+    cleanedText = cleanedText.replace(/\([^)]*\)/g, '');
+    return [cleanedText.trim(), complementType.trim()];
+}
     async processComplements(productModal) {
+      let isRequired
       let complementsDict = []
       let complementExpandables = productModal.querySelectorAll(".col-md-12.complement");
       for await (const complementExpandable of complementExpandables) {
@@ -82,60 +79,75 @@ class scrapyInstaDelivery {
         for await (const complementElement of complementElements) {
 
           let complementNameElement = complementElement.textContent
-          //Separa o nome do complemento do seu tipo e.g : (Obrigatório) 0/2 
+          //Separa o nome do complemento do seu tipo e.g : (Obrigatório) 0/2
           let [complementName, complementType] = await this.cleanUpText(complementNameElement.textContent);
           //Captura a quantidade de opções e se a opção é obrigatória ou não
-          let [isRequired, minQtd, maxQtd] = await this.getComplementQuantityRequired(typeComplementText);
+          let minQtd, maxQtd
+          [isRequired, minQtd, maxQtd] = await this.getComplementQuantityRequired(complementType);
           //Verifica se tem repetição e o tipo 'mais de uma opcao' ou não.
-          let typeComplement = await this.getComplementType(complementExpandable, maxQtd) 
+          let typeComplement = await this.getComplementType(complementExpandable, maxQtd)
           console.log([typeComplement, minQtd, maxQtd])
-          
+
+          let complementsDict = []
           // Pegar nome de cada opção do complemento da iteração
           let optionsElement = complementExpandable.querySelectorAll('.form-check');
           for await (const optionElement of optionsElement) {
 
-            let optionTitleElement = optionElement.querySelector('.item-complement');
+            let optionTitleElement = optionElement.querySelector('.item-complement, .complement-name');
             let optionPriceElement = optionElement.querySelector('.sub-item-price')
 
-            let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
+            let optionTitle = optionTitleElement ? optionTitleElement.textContent.trim() : "";
             let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
             let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
             let optionDescription = "";
-                
+
+            console.log("- - - - - - - - - - - - - - - - - ")
+            console.log("NOME DO COMPLEMENTO: ",complementName)
+            console.log("TEXTO DO TIPO DO COMPLEMENTO: ",typeComplementText.trim())
+            console.log("TIPO DO COMPLEMENT: ",typeComplement)
+            console.log("QUANTIDADE MIN: ",minQtd)
+            console.log("QUANTIDADE MAX: ",maxQtd)
+            console.log("OPÇOES: ",optionsComplement)
+            console.log("- - - - - - - - - - - - - - - - - ")
+            console.log("                                  ")
+
+            optionsComplement.push({
+              optionTitle: optionTitle,
+              optionPrice: optionPrice,
+              optionDescription: optionDescription
+            });
+
+
+          complementsDict.push({
+            nameComplement: complementName,
+            typeComplement: typeComplement,
+            minQtd: minQtd,
+            maxQtd: maxQtd,
+            options: optionsComplement
+          })
           }
         }
       }
+      return [complementsDict, isRequired];
     }
-    
-    async calculateComplements(productModal) {
+    // [*] Função responsável por clicar em avançar e executar a captura dos complementos em cada página.
+    async calculateComplements(productModal) { 
       // Busque o botão "Avançar" dentro do productModal
       let avancarButton = productModal.querySelector('.add-cart-button:contains("Avançar")');
-    
+      
       while (avancarButton) {
+        let avancarButton = productModal.querySelector('.add-cart-button:contains("Avançar")');
+        await processComplements(productModal);
         // Se o botão "Avançar" estiver disponível, clique nele
         avancarButton.click();
-        await processComplements(productModal);
         // Busque novamente o botão "Avançar" dentro do productModal
         avancarButton = productModal.querySelector('.add-cart-button:contains("Avançar")');
       }
-    }
+      }
 
-    async cleanUpText(text) {
-    // Remove espaços extras e quebras de linha
-    let cleanedText = text.trim().replace(/\s+/g, ' ');
 
-    // Encontrar o texto entre parênteses
-    let matches = cleanedText.match(/\(([^)]*)\)/);
+  //Função principal =============
 
-    // Se houver correspondências, extraia o texto entre parênteses
-    let complementType = matches ? matches[1] : '';
-
-    // Remova o texto entre parênteses de cleanedText
-    cleanedText = cleanedText.replace(/\([^)]*\)/g, '');
-
-    return [cleanedText.trim(), complementType.trim()];
-}
-  
     async clickProductCards() {
       console.log("executando..")
       await this.sleep(500)
@@ -143,19 +155,19 @@ class scrapyInstaDelivery {
       this.titleRestaurant = document.title || '';
       console.log(this.titleRestaurant)
       let categoryDivs = document.querySelectorAll('.card.mb-4')
-    
+
       for await (const categoryIndex of [...Array(categoryDivs.length).keys()]) {
         await this.sleep(500)
         let categoryDivs = document.querySelectorAll('.card.mb-4')
         let categoryDiv = categoryDivs[categoryIndex];
         let categoryNameElement = categoryDiv.querySelector('.group-name')
         let categoryName = categoryNameElement ? categoryNameElement.textContent : "";
-        
+
         let productCards = categoryDiv.querySelectorAll('.item-container.w-100 .col-md-12.item')
 
         console.log(categoryName)
         console.log(productCards.length)
-  
+
         let productData = [];
         for await (const productIndex of [...Array(productCards.length).keys()]) {
           await this.sleep(500)
@@ -163,9 +175,9 @@ class scrapyInstaDelivery {
           let categoryDiv = categoryDivs[categoryIndex];
           let productCards = categoryDiv.querySelectorAll('.item-container.w-100 .col-md-12.item')
           let productCard = productCards[productIndex];
-          
+
           console.log({productIndex, productCard})
-          
+
           let priceElement = productCard.querySelector('.price');
 
           productCard.scrollIntoView()
@@ -184,48 +196,9 @@ class scrapyInstaDelivery {
             let imgSrc = imgElement ? imgElement.src : "";
             let productDescricao = descricaoElement ? descricaoElement.textContent : "";
 
-            let complementsDict = []
-            
-                
-                
-                // Pegar nome de cada opção do complemento da iteração
-                let optionsElement = complementExpandable.querySelectorAll('.form-check');
-                for await (const optionElement of optionsElement) {
 
-                  let optionTitleElement = optionElement.querySelector('.item-complement');
-                  let optionPriceElement = optionElement.querySelector('.sub-item-price')
+          //Pegar os complementos
 
-                  let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
-                  let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-                  let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
-                  let optionDescription = "";
-
-                  console.log("- - - - - - - - - - - - - - - - - ")
-                  console.log("NOME DO COMPLEMENTO: ",complementName)
-                  console.log("TEXTO DO TIPO DO COMPLEMENTO: ",typeComplementText.trim())
-                  console.log("TIPO DO COMPLEMENT: ",typeComplement)
-                  console.log("QUANTIDADE MIN: ",minQtd)
-                  console.log("QUANTIDADE MAX: ",maxQtd)
-                  console.log("OPÇOES: ",optionsComplement)
-                  console.log("- - - - - - - - - - - - - - - - - ")
-                  console.log("                                  ")
-
-                  optionsComplement.push({
-                    optionTitle: optionTitle,
-                    optionPrice: optionPrice,
-                    optionDescription: optionDescription
-                  });
-                
-    
-                complementsDict.push({
-                  nameComplement: complementName,
-                  typeComplement: typeComplement,
-                  minQtd: minQtd,
-                  maxQtd: maxQtd,
-                  options: optionsComplement
-                })
-            }
-    
             productData.push({
               title: productTitle,
               price: productPrice,
@@ -244,7 +217,7 @@ class scrapyInstaDelivery {
         console.log("Categoria adicionada")
         await this.backPage();
       }
-  
+
   async backPage() {
     console.log("Voltou!")
     await this.sleep(1000);
