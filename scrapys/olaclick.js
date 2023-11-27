@@ -165,6 +165,14 @@ class ScrapyOlaClick {
                   let productCards = categoryDiv.querySelectorAll('.product-card');
                   let productCard = productCards[productIndex];
 
+                  let isOutOfStock = productCard.querySelector('.out-of-stock.product-card__out-of-stock');
+                  if (isOutOfStock) {
+                      let productNameElement = productCard.querySelector('.product-card__title');
+                      let productName = productNameElement ? productNameElement.textContent.trim() : "Nome do Produto Indisponível";
+                      console.log("Produto esgotado. Pulando para o próximo. Nome do Produto:", productName);
+                      continue;  // Pular para o próximo produto se estiver esgotado
+                  }
+
                   await this.sleep(500);
                   productCard.scrollIntoView();
                   productCard.click();
