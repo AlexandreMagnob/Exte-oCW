@@ -242,7 +242,7 @@ class ScrapyOlaClick {
                   let optionPriceElement = optionElement.querySelector('.product-price-radio__price');
                   optionTitle = optionTitleElement.textContent.trim();
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-                  optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                  optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',');
                   
                     
                   
@@ -256,7 +256,7 @@ class ScrapyOlaClick {
                     let optionText = optionDivElement.textContent;
                     let optionParts = optionText.split(/\s*\+\s*/);
                     optionTitle = optionParts[0].trim();
-                    optionPrice = optionParts[1] ? optionParts[1].trim().replace(/[^\d,.]/g, '').replace(',', '.') : "0";
+                    optionPrice = optionParts[1] ? optionParts[1].trim().replace(/[^\d,.]/g, '').replace('.', ',') : "0";
                     
                     
                     // Certificar-se de que optionPriceText seja uma string antes de tentar acessar a propriedade textContent
@@ -274,7 +274,7 @@ class ScrapyOlaClick {
                   let optionTitleText = optionTitleElement.textContent.trim();
                   optionTitle = optionTitleText
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-                  optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                  optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',');
                   
                   
                 }
