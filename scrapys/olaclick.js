@@ -47,24 +47,24 @@ class ScrapyOlaClick {
             if (matchSelect) {
                 const itemCount = parseInt(matchSelect[1], 10);
                 if (itemCount !== 1) {
-                    type = "Mais de uma opção " + repetition;
+                    type = "Mais de uma opcao " + repetition;
                     minQtd = itemCount;
                     maxQtd = itemCount;
                     console.log('minQtd:', minQtd, 'maxQtd:', maxQtd);
                 }
             } else if (complement === "Selecione 1 opção") {
-                type = "Apenas uma opção ";
+                type = "Apenas uma opcao ";
                 minQtd = 1;
                 maxQtd = 1;
             } else if (matchSelectUntil) {
             const maxItems = parseInt(matchSelectUntil[1], 10);
             if (maxItems === 1) {
-                type = "Apenas uma opção " + repetition;
+                type = "Apenas uma opcao " + repetition;
                 minQtd = 0;
                 maxQtd = maxItems;
                 console.log('minQtd:', minQtd, 'maxQtd:', maxQtd);
             } else {
-                type = "Mais de um opção " + repetition;
+                type = "Mais de um opcao " + repetition;
                 minQtd = 0;
                 maxQtd = maxItems;
                 console.log('minQtd:', minQtd, 'maxQtd:', maxQtd);
@@ -72,14 +72,14 @@ class ScrapyOlaClick {
         } else if (matchChooseFromTo) {
                 const minItems = parseInt(matchChooseFromTo[1], 10);
                 const maxItems = parseInt(matchChooseFromTo[2], 10);
-                type = "Mais de uma opção " + repetition;
+                type = "Mais de uma opcao " + repetition;
                 minQtd = minItems;
                 maxQtd = maxItems;
                 console.log('minQtd:', minQtd, 'maxQtd:', maxQtd);
             } else if (matchSelectMin) {
                 const minItems = parseInt(matchSelectMin[1], 10);
                 const maxItems = parseInt(matchSelectMin[1], 10);
-                type = "Apenas uma opção " + repetition;
+                type = "Apenas uma opcao " + repetition;
                 minQtd = minItems;
                 maxQtd = maxItems
                 console.log('minQtd:', minQtd, 'maxqtd', maxQtd);
@@ -165,21 +165,23 @@ class ScrapyOlaClick {
                   let productCards = categoryDiv.querySelectorAll('.product-card');
                   let productCard = productCards[productIndex];
 
-                  let isOutOfStock = productCard.querySelector('.out-of-stock.product-card__out-of-stock');
-                  if (isOutOfStock) {
-                      let productNameElement = productCard.querySelector('.product-card__title');
-                      let productName = productNameElement ? productNameElement.textContent.trim() : "Nome do Produto Indisponível";
-                      console.log("Produto esgotado. Pulando para o próximo. Nome do Produto:", productName);
-                      continue;  // Pular para o próximo produto se estiver esgotado
-                  }
+                 // Verificar se o produto está esgotado
+                let isOutOfStock = productCard.querySelector('.out-of-stock.product-card__out-of-stock');
+                let productNameElement = productCard.querySelector('.product-card__title');
+                let productName = productNameElement ? productNameElement.textContent.trim() : "Nome do Produto Indisponível";
 
-                  await this.sleep(500);
-                  productCard.scrollIntoView();
-                  productCard.click();
-                  await this.sleep(1000);
-                  await this.openClosedComplementPanels();
-                  // Agora, vamos adicionar um atraso antes de coletar os dados.
-                  await this.sleep(1000);
+                if (isOutOfStock) {
+                    console.log("Produto esgotado. Adicionando ao productData. Nome do Produto:", productName);
+                } else {
+                    // Clicar no produto
+                    await this.sleep(500);
+                    productCard.scrollIntoView();
+                    productCard.click();
+                    await this.sleep(1000);
+                    await this.openClosedComplementPanels();
+                    // Adicionar um atraso antes de coletar os dados.
+                    await this.sleep(1000);
+                }
 
                   
             let productModal = document.querySelector('.v-dialog.v-dialog--active.v-dialog--scrollable');
