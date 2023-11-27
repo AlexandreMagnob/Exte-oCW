@@ -26,15 +26,16 @@ class scrapyInstaDelivery {
       let cleanedType = complementType.replace(/[()]/g, '').trim();
       // Identificar se é Obrigatório ou Opcional
       let isOptional = cleanedType.toLowerCase().includes('opcional');
+      let isRequired = !isOptional
       // Encontrar os números presentes na string
       let matches = cleanedType.match(/(\d+)/g);
       // Definir maxQuantity baseado nos matches
       let maxQuantity = matches ? parseInt(matches[matches.length - 1], 10) : 1;
       let minQuantity = 0
-      if(!isOptional){
+      if(isRequired){
         minQuantity = maxQuantity
       }
-      return [isOptional,minQuantity,maxQuantity];
+      return [isRequired,minQuantity,maxQuantity];
     }
     // [*] Função responsável por verificar o tipo do complemento (sua repetição, multiplicidade)
     async getComplementType(complementExpandable, Quantity){
@@ -69,7 +70,7 @@ class scrapyInstaDelivery {
     return [cleanedText.trim(), complementType.trim()];
 }
     async processComplements(productModal) {
-      let isRequired
+      let isRequired, minQtd, maxQtd
       let complementsDict = []
       let complementExpandables = productModal.querySelectorAll(".col-md-12.complement");
       for await (const complementExpandable of complementExpandables) {
@@ -82,7 +83,6 @@ class scrapyInstaDelivery {
           //Separa o nome do complemento do seu tipo e.g : (Obrigatório) 0/2
           let [complementName, complementType] = await this.cleanUpText(complementNameElement.textContent);
           //Captura a quantidade de opções e se a opção é obrigatória ou não
-          let minQtd, maxQtd
           [isRequired, minQtd, maxQtd] = await this.getComplementQuantityRequired(complementType);
           //Verifica se tem repetição e o tipo 'mais de uma opcao' ou não.
           let typeComplement = await this.getComplementType(complementExpandable, maxQtd)
@@ -128,22 +128,56 @@ class scrapyInstaDelivery {
           }
         }
       }
-      return [complementsDict, isRequired];
+      return [complementsDict, isRequired, maxQtd];
     }
+
+
     // [*] Função responsável por clicar em avançar e executar a captura dos complementos em cada página.
     async calculateComplements(productModal) { 
-      // Busque o botão "Avançar" dentro do productModal
-      let avancarButton = productModal.querySelector('.add-cart-button:contains("Avançar")');
-      
+      let buttons = productModal.querySelectorAll('.add-cart-button');
+
+      // Filtrar os botões para encontrar o botão "Avançar"
+      let avancarButton = Array.from(buttons).find(button => button.textContent.includes('Avançar'));
+
       while (avancarButton) {
-        let avancarButton = productModal.querySelector('.add-cart-button:contains("Avançar")');
-        await processComplements(productModal);
-        // Se o botão "Avançar" estiver disponível, clique nele
+        // Executar processComplements e obter o retorno
+        let [complementsDict, isRequired, maxQtd] = await this.processComplements(productModal);
+    
+        // Se o complemento for obrigatório, clique em pelo menos uma opção antes de avançar
+        if (isRequired) {
+          // Implemente a lógica para clicar em uma opção do complemento obrigatório
+          await this.clickOptionForRequiredComplement(complementsDict, maxQtd);
+        }
+        else{
+        // Clique no botão "Avançar"
         avancarButton.click();
-        // Busque novamente o botão "Avançar" dentro do productModal
-        avancarButton = productModal.querySelector('.add-cart-button:contains("Avançar")');
-      }
-      }
+        }
+        // Aguarde um tempo para a próxima página carregar
+        await this.sleep(1500);
+    
+        // Busque novamente os botões dentro do productModal
+        buttons = productModal.querySelectorAll('.add-cart-button');
+
+        // Filtrar os botões para encontrar o botão "Avançar"
+        avancarButton = Array.from(buttons).find(button => button.textContent.includes('Avançar'));
+    }
+    }
+    
+    async clickOptionForRequiredComplement(complementExpandable, maxQtd = 1) {
+        let optionElement = complementExpandable.querySelector('.form-check');
+        let plusButton = optionElement.querySelector('.fas.fa-plus-square')
+          if(plusButton){
+            for (let i = 0; i < maxQtd; i++){
+              await this.sleep(400)
+              plusButton.click();
+            }
+          }
+          else{
+            let radioInput = optionElement.querySelector('input')
+            radioInput.click()
+            await this.sleep(400)
+          }
+    }
 
 
   //Função principal =============
