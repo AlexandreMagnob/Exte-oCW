@@ -223,7 +223,7 @@ class ScrapyOlaClick {
                 let [typeComplement, minQtd, maxQtd] = await this.processTypeComplement(typeComplementText.trim(), complementExpandable);
 
                 let required = requiredElement ? requiredElement.textContent : "";
-                let complementName = complementNameElement ? complementNameElement.textContent : "";
+                let complementName = complementNameElement ? complementNameElement.textContent.trim() : "";
                 
                 
                 // Pegar nome de cada opção do complemento da iteração
