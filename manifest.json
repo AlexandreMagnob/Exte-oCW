@@ -33,8 +33,7 @@
         "scrapys/goomer.js",
         "scrapys/instadelivery.js",
         "handlerScrapy.js",
-        "sheet_generation.js",
-        "puppeteer-core.js"
+        "sheet_generation.js"
       ],
       "all_frames": true
     }
