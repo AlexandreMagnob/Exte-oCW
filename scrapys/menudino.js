@@ -171,7 +171,7 @@ class ScrapyDino {
                   
                   optionTitle = optionTitleElement.textContent.trim();
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-                  optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                  optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
 
                   
                   console.log({optionPrice, optionTitle})
@@ -194,7 +194,7 @@ class ScrapyDino {
                     let optionLabelContent = optionLabelElement.textContent.trim();
                     optionTitle = optionLabelContent.split('+')[0].trim();
                     let optionPriceText = optionLabelContent.split('+')[1];
-                    optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                    optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
 
                     console.log({optionPrice, optionTitle})
                   }

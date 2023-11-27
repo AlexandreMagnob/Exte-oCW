@@ -98,7 +98,7 @@ class scrapyInstaDelivery {
 
             let optionTitle = optionTitleElement ? optionTitleElement.textContent.trim() : "";
             let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-            let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+            let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',');
             let optionDescription = "";
 
             console.log("- - - - - - - - - - - - - - - - - ")

@@ -170,7 +170,7 @@ class ScrapyAnotai {
     
                   let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-                  let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                  let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
                   //let optionQtd = optionQtdElement ? optionQtdElement.textContent : "";
                   let optionDescription = optionDescriptionElement ? optionDescriptionElement.textContent : "";
     
