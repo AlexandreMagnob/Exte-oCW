@@ -141,6 +141,7 @@ class ScrapyAnotai {
             let productTitle = titleElement ? titleElement.textContent : "";
             let priceText = priceElement ? priceElement.textContent : "";
             let productPrice = priceText.replace(/[^\d,.]/g, '').replace('.', ',')
+            
             let imgSrc = imgElement ? imgElement.src : "";
             let productDescricao = descricaoElement ? descricaoElement.textContent : "";
     

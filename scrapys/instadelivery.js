@@ -69,67 +69,74 @@ class scrapyInstaDelivery {
     cleanedText = cleanedText.replace(/\([^)]*\)/g, '');
     return [cleanedText.trim(), complementType.trim()];
 }
-    async processComplements(productModal) {
-      let isRequired, minQtd, maxQtd
-      let complementsDict = []
-      let complementExpandables = productModal.querySelectorAll(".col-md-12.complement");
-      for await (const complementExpandable of complementExpandables) {
-        let complementElements = complementExpandable.querySelectorAll('.complement-font');
-        let optionsComplement = [];
-        // Pegar o nome de cada complemento
-        for await (const complementElement of complementElements) {
+async processComplements(productModal) {
+  let complementsDict = [];
+  let isRequired, minQtd, maxQtd;
+  let Required;
+  let complementExpandables = productModal.querySelectorAll(".col-md-12.complement");
 
-          let complementNameElement = complementElement.textContent
-          //Separa o nome do complemento do seu tipo e.g : (Obrigatório) 0/2
-          let [complementName, complementType] = await this.cleanUpText(complementNameElement.textContent);
-          //Captura a quantidade de opções e se a opção é obrigatória ou não
+  for await (const complementExpandable of complementExpandables) {
+      let complementElements = complementExpandable.querySelectorAll('.complement-font');
+      let optionsComplement = [];
+
+      // Pegar o nome de cada complemento
+      for await (const complementElement of complementElements) {
+          let complementNameElement = complementElement.textContent;
+          // Separa o nome do complemento do seu tipo e.g: (Obrigatório) 0/2
+          let [complementName, complementType] = await this.cleanUpText(complementNameElement);
+
+          // Captura a quantidade de opções e se a opção é obrigatória ou não
           [isRequired, minQtd, maxQtd] = await this.getComplementQuantityRequired(complementType);
-          //Verifica se tem repetição e o tipo 'mais de uma opcao' ou não.
-          let typeComplement = await this.getComplementType(complementExpandable, maxQtd)
-          console.log([typeComplement, minQtd, maxQtd])
+          Required = isRequired;
 
-          let complementsDict = []
+          // Verifica se tem repetição e o tipo 'mais de uma opção' ou não.
+          let typeComplement = await this.getComplementType(complementExpandable, maxQtd);
+
           // Pegar nome de cada opção do complemento da iteração
           let optionsElement = complementExpandable.querySelectorAll('.form-check');
           for await (const optionElement of optionsElement) {
+              let optionTitleElement = optionElement.querySelector('.item-complement, .complement-name');
+              let optionPriceElement = optionElement.querySelector('.sub-item-price');
 
-            let optionTitleElement = optionElement.querySelector('.item-complement, .complement-name');
-            let optionPriceElement = optionElement.querySelector('.sub-item-price')
+              let optionTitle = optionTitleElement ? optionTitleElement.textContent.trim() : "";
+              let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
+              let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',');
+              let optionDescription = "";
 
-            let optionTitle = optionTitleElement ? optionTitleElement.textContent.trim() : "";
-            let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-            let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',');
-            let optionDescription = "";
 
-            console.log("- - - - - - - - - - - - - - - - - ")
-            console.log("NOME DO COMPLEMENTO: ",complementName)
-            console.log("TEXTO DO TIPO DO COMPLEMENTO: ",typeComplementText.trim())
-            console.log("TIPO DO COMPLEMENT: ",typeComplement)
-            console.log("QUANTIDADE MIN: ",minQtd)
-            console.log("QUANTIDADE MAX: ",maxQtd)
-            console.log("OPÇOES: ",optionsComplement)
-            console.log("- - - - - - - - - - - - - - - - - ")
-            console.log("                                  ")
 
-            optionsComplement.push({
-              optionTitle: optionTitle,
-              optionPrice: optionPrice,
-              optionDescription: optionDescription
-            });
 
+              optionsComplement.push({
+                  optionTitle: optionTitle,
+                  optionPrice: optionPrice,
+                  optionDescription: optionDescription
+              });
+          }
 
           complementsDict.push({
-            nameComplement: complementName,
-            typeComplement: typeComplement,
-            minQtd: minQtd,
-            maxQtd: maxQtd,
-            options: optionsComplement
-          })
-          }
-        }
+              nameComplement: complementName,
+              typeComplement: typeComplement,
+              minQtd: minQtd,
+              maxQtd: maxQtd,
+              options: optionsComplement
+          });
+
+          console.log("- - - - - - - - - - - - - - - - - ")
+          console.log("NOME DO COMPLEMENTO: ",complementName)
+          console.log("TEXTO DO TIPO DO COMPLEMENTO: ",typeComplementText.trim())
+          console.log("TIPO DO COMPLEMENTO: ",typeComplement)
+          console.log("QUANTIDADE MIN: ",minQtd)
+          console.log("QUANTIDADE MAX: ",maxQtd)
+          console.log("REQUERED: ", required)
+          console.log("OPÇOES: ",optionsComplement)
+          console.log("- - - - - - - - - - - - - - - - - ")
+          console.log("                                  ")
       }
-      return [complementsDict, isRequired, maxQtd];
-    }
+  }
+
+  return [complementsDict, Required, maxQtd];
+}
+
 
 
     // [*] Função responsável por clicar em avançar e executar a captura dos complementos em cada página.
@@ -230,8 +237,7 @@ class scrapyInstaDelivery {
             let imgSrc = imgElement ? imgElement.src : "";
             let productDescricao = descricaoElement ? descricaoElement.textContent : "";
 
-
-          //Pegar os complementos
+            let [complementsDict, isRequired, maxQtd] = await this.processComplements(productModal)
 
             productData.push({
               title: productTitle,
