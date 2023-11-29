@@ -182,7 +182,7 @@ class ScrapyDino {
                   let match = optionText.match(regex);
                 
                   optionTitle = match ? match[1].trim() : "";
-                  optionPrice = match ? match[2].replace(',', '.') : "";
+                  optionPrice = match ? match[2].replace('.', ',') : "";
                   
                   console.log({optionPrice, optionTitle})
                 }
