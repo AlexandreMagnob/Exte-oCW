@@ -141,6 +141,7 @@ class ScrapyAnotai {
             let productTitle = titleElement ? titleElement.textContent : "";
             let priceText = priceElement ? priceElement.textContent : "";
             let productPrice = priceText.replace(/[^\d,.]/g, '').replace('.', ',')
+            
             let imgSrc = imgElement ? imgElement.src : "";
             let productDescricao = descricaoElement ? descricaoElement.textContent : "";
     
@@ -170,7 +171,7 @@ class ScrapyAnotai {
     
                   let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-                  let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                  let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
                   //let optionQtd = optionQtdElement ? optionQtdElement.textContent : "";
                   let optionDescription = optionDescriptionElement ? optionDescriptionElement.textContent : "";
     

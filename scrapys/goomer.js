@@ -125,7 +125,7 @@ class ScrapyGoomer {
 
                   let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-                  let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                  let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
                   let optionDescription = optionTitle.includes('-') ? optionTitle.split('-')[1].trim() : "";
 
                   console.log("- - - - - - - - - - - - - - - - - ")
