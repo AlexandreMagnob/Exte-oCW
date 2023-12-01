@@ -103,9 +103,6 @@ async processComplements(productModal) {
               let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',');
               let optionDescription = "";
 
-
-
-
               optionsComplement.push({
                   optionTitle: optionTitle,
                   optionPrice: optionPrice,
@@ -123,17 +120,14 @@ async processComplements(productModal) {
 
           console.log("- - - - - - - - - - - - - - - - - ")
           console.log("NOME DO COMPLEMENTO: ",complementName)
-          console.log("TEXTO DO TIPO DO COMPLEMENTO: ",typeComplementText.trim())
           console.log("TIPO DO COMPLEMENTO: ",typeComplement)
           console.log("QUANTIDADE MIN: ",minQtd)
           console.log("QUANTIDADE MAX: ",maxQtd)
-          console.log("REQUERED: ", required)
           console.log("OPÇOES: ",optionsComplement)
           console.log("- - - - - - - - - - - - - - - - - ")
           console.log("                                  ")
       }
   }
-
   return [complementsDict, Required, maxQtd];
 }
 
@@ -198,16 +192,16 @@ async processComplements(productModal) {
       let categoryDivs = document.querySelectorAll('.card.mb-4')
 
       for await (const categoryIndex of [...Array(categoryDivs.length).keys()]) {
-        await this.sleep(500)
-        let categoryDivs = document.querySelectorAll('.card.mb-4')
+        await this.sleep(500);
+        let categoryDivs = document.querySelectorAll('.card.mb-4');
         let categoryDiv = categoryDivs[categoryIndex];
-        let categoryNameElement = categoryDiv.querySelector('.group-name')
+        let categoryNameElement = categoryDiv.querySelector('.group-name');
         let categoryName = categoryNameElement ? categoryNameElement.textContent : "";
 
-        let productCards = categoryDiv.querySelectorAll('.item-container.w-100 .col-md-12.item')
+        let productCards = categoryDiv.querySelectorAll('.item-container.w-100 .col-md-12.item');
 
-        console.log(categoryName)
-        console.log(productCards.length)
+        console.log("TAMAHO PRODUTOS:", productCards.length);
+        console.log("CATEGORIA", {categoryDiv, categoryName});
 
         let productData = [];
         for await (const productIndex of [...Array(productCards.length).keys()]) {
@@ -249,13 +243,13 @@ async processComplements(productModal) {
             console.log("Produto adicionado")
             await this.backPage();
           }
-        }
+        
         this.scrapedData.push({
           categoryName: categoryName,
           productsCategory: productData
         });
         console.log("Categoria adicionada")
-        await this.backPage();
+        }
       }
 
   async backPage() {
