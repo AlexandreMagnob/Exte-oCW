@@ -7,11 +7,23 @@ class scrapyInstaDelivery {
     }
 
     sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)); }
-
+    async verifyClosed(){
+      let cardBody = document.querySelector('.card-body');
+      let closed = cardBody.querySelector('.badge-danger');
+      var bool
+      console.log(closed)
+      if(closed){
+        bool = true
+      }
+      else {
+        bool = false
+      }
+      return bool
+    }
     // [*]  Função responsável por pegar o preço do produto; em caso de promoções, pegar o preço original.
     async getPriceProduct(priceText){
-      let multiplePrices = priceText.includes('\n');
-      let productPrice;
+      var multiplePrices = priceText.includes('\n');
+      var productPrice;
       if (multiplePrices) {
         let priceElements = priceText.split('\n').map(e => e.trim()).filter(Boolean);
         productPrice = priceElements[0].replace(/[^\d,.]/g, '').replace('.', ',');
@@ -70,38 +82,37 @@ class scrapyInstaDelivery {
     return [cleanedText.trim(), complementType.trim()];
 }
 async processComplements(productModal) {
-  let complementsDict = [];
-  let isRequired, minQtd, maxQtd;
-  let Required;
-  let complementExpandables = productModal.querySelectorAll(".col-md-12.complement");
+  var complementsDict = [];
+  var complementExpandables = productModal.querySelectorAll(".col-md-12.complement, .col-md-10.col-sm-10");
 
   for await (const complementExpandable of complementExpandables) {
-      let complementElements = complementExpandable.querySelectorAll('.complement-font');
-      let optionsComplement = [];
 
-      // Pegar o nome de cada complemento
-      for await (const complementElement of complementElements) {
-          let complementNameElement = complementElement.textContent;
-          // Separa o nome do complemento do seu tipo e.g: (Obrigatório) 0/2
-          let [complementName, complementType] = await this.cleanUpText(complementNameElement);
+      if(complementExpandable.classList.contains('col-md-10')){
+        complementElements = complementExpandable.querySelectorAll('.item-desc');
+      
+        var optionsComplement = [];
 
+        for await (const complementElement of complementElements) {
+          var complementNameElement = complementExpandable.querySelector('i');
+          var complementName = complementTitleElement ? complementTitleElement.nextSibling.textContent.trim() : '';
+          
           // Captura a quantidade de opções e se a opção é obrigatória ou não
-          [isRequired, minQtd, maxQtd] = await this.getComplementQuantityRequired(complementType);
-          Required = isRequired;
+          var [Required, minQtd, maxQtd] = await this.getComplementQuantityRequired(complementType);
 
           // Verifica se tem repetição e o tipo 'mais de uma opção' ou não.
-          let typeComplement = await this.getComplementType(complementExpandable, maxQtd);
+          var typeComplement = await this.getComplementType(complementExpandable, maxQtd);
 
           // Pegar nome de cada opção do complemento da iteração
-          let optionsElement = complementExpandable.querySelectorAll('.form-check');
+          var optionsElement = complementExpandable.querySelectorAll('.form-check');
           for await (const optionElement of optionsElement) {
-              let optionTitleElement = optionElement.querySelector('.item-complement, .complement-name');
-              let optionPriceElement = optionElement.querySelector('.sub-item-price');
+              var optionTitleElement = optionElement.querySelector('.item-complement, .complement-name');
+              var optionPriceElement = optionElement.querySelector('.sub-item-price');
 
-              let optionTitle = optionTitleElement ? optionTitleElement.textContent.trim() : "";
-              let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-              let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',');
-              let optionDescription = "";
+              var optionTitle = optionTitleElement ? optionTitleElement.textContent.trim() : "";
+              var optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
+              var optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',');
+              var optionDescription = "";
+            }
 
               optionsComplement.push({
                   optionTitle: optionTitle,
@@ -109,25 +120,61 @@ async processComplements(productModal) {
                   optionDescription: optionDescription
               });
           }
-
-          complementsDict.push({
-              nameComplement: complementName,
-              typeComplement: typeComplement,
-              minQtd: minQtd,
-              maxQtd: maxQtd,
-              options: optionsComplement
-          });
-
-          console.log("- - - - - - - - - - - - - - - - - ")
-          console.log("NOME DO COMPLEMENTO: ",complementName)
-          console.log("TIPO DO COMPLEMENTO: ",typeComplement)
-          console.log("QUANTIDADE MIN: ",minQtd)
-          console.log("QUANTIDADE MAX: ",maxQtd)
-          console.log("OPÇOES: ",optionsComplement)
-          console.log("- - - - - - - - - - - - - - - - - ")
-          console.log("                                  ")
       }
-  }
+      if(complementExpandable.classList.contains('col-md-12')){
+        var complementElements = complementExpandable.querySelectorAll('.complement-font');
+        var optionsComplement = [];
+
+        // Pegar o nome de cada complemento
+        for await (const complementElement of complementElements) {
+            var complementNameElement = complementElement.textContent;
+            // Separa o nome do complemento do seu tipo e.g: (Obrigatório) 0/2
+            var [complementName, complementType] = await this.cleanUpText(complementNameElement);
+
+            // Captura a quantidade de opções e se a opção é obrigatória ou não
+            var [Required, minQtd, maxQtd] = await this.getComplementQuantityRequired(complementType);
+
+            // Verifica se tem repetição e o tipo 'mais de uma opção' ou não.
+            var typeComplement = await this.getComplementType(complementExpandable, maxQtd);
+
+            // Pegar nome de cada opção do complemento da iteração
+            var optionsElement = complementExpandable.querySelectorAll('.form-check');
+            for await (const optionElement of optionsElement) {
+                var optionTitleElement = optionElement.querySelector('.item-complement, .complement-name');
+                var optionPriceElement = optionElement.querySelector('.sub-item-price');
+
+                var optionTitle = optionTitleElement ? optionTitleElement.textContent.trim() : "";
+                var optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
+                var optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',');
+                var optionDescription = "";
+              }
+
+                optionsComplement.push({
+                    optionTitle: optionTitle,
+                    optionPrice: optionPrice,
+                    optionDescription: optionDescription
+                });
+            }
+
+            complementsDict.push({
+                nameComplement: complementName,
+                typeComplement: typeComplement,
+                minQtd: minQtd,
+                maxQtd: maxQtd,
+                options: optionsComplement
+            });
+
+            console.log("- - - - - - - - - - - - - - - - - ")
+            console.log("NOME DO COMPLEMENTO: ",complementName)
+            console.log("TIPO DO COMPLEMENTO: ",typeComplement)
+            console.log("QUANTIDADE MIN: ",minQtd)
+            console.log("QUANTIDADE MAX: ",maxQtd)
+            console.log("OPÇOES: ",optionsComplement)
+            console.log("- - - - - - - - - - - - - - - - - ")
+            console.log("                                  ")
+        }
+        
+    }
   return [complementsDict, Required, maxQtd];
 }
 
