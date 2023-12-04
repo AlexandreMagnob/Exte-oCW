@@ -29,7 +29,7 @@ class HandlerScrapy {
         const titleRestaurant = this.scrapyAnotai.titleRestaurant
         await createCSV(scrapedData, titleRestaurant)
       } 
-      else if(restaurante == "Hubt")
+      else if(restaurante == "Yooga")
       {
         await alert("Iniciando...");
         await this.scrapyYooga.clickProductCards()
@@ -87,7 +87,7 @@ class HandlerScrapy {
         }
       }
       else {
-        console.error('Restaurante inválido');
+        await alert('Restaurante inválido');
       }
     }
   }
