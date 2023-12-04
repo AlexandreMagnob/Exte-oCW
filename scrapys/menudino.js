@@ -79,6 +79,9 @@ class ScrapyDino {
     }
 
   async clickProductCards() {
+
+    this.titleRestaurant = (document.title || {}).textContent || '';
+
     console.log("executando..")
     await this.sleep(500)
     let categoryDivs = document.querySelectorAll('.panel.panel-danger')

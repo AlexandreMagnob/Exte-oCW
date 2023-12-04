@@ -24,7 +24,10 @@
         "https://*.menudino.com/*",
         "https://*.goomer.app/*",
         "https://*.ola.click/*",
-        "https://instadelivery.com.br/*"
+        "https://instadelivery.com.br/*",
+        "https://www.hubt.com.br/*",
+        "https://app.jotaja.com/*",
+        "https://*.yooga.app/*"
       ],
       "js": [
         "papaparse.min.js",
@@ -33,6 +36,9 @@
         "scrapys/olaclick.js",
         "scrapys/goomer.js",
         "scrapys/instadelivery.js",
+        "scrapys/hubt.js",
+        "scrapys/jotaja.js",
+        "scrapys/yooga.js",
         "handlerScrapy.js",
         "sheet_generation.js"
       ],

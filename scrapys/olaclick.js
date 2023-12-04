@@ -119,6 +119,9 @@ class ScrapyOlaClick {
     }
   
     async clickProductCards() {
+      
+        this.titleRestaurant =  (document.querySelector('h1.company__name') || {}).textContent || '';
+
         console.log("executando..")
         await this.sleep(1000);
         await this.scrollToEndAndBack();
