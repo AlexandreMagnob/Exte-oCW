@@ -1,6 +1,6 @@
 //Feito por Alexandre
 
-class ScrapyHubt {
+class scrapyHubt {
     constructor() {
       this.scrapedData = [];
       this.titleRestaurant = ""
