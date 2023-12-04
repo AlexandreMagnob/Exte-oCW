@@ -224,7 +224,7 @@ class ScrapyOlaClick {
                     let optionPriceElement = optionElement.querySelector('.product-price-radio__price');
                     optionTitle = optionTitleElement.textContent.trim();
                     let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-                    optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                    optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
                     
                       
                     
@@ -257,7 +257,7 @@ class ScrapyOlaClick {
                     let optionTitleText = optionTitleElement.textContent.trim();
                     optionTitle = optionTitleText
                     let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
-                    optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace(',', '.');
+                    optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
                     
                     
                   }
