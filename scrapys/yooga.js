@@ -43,11 +43,13 @@ class scrapyYooga {
         const counterValue = parseInt(counter.textContent, 10);
         if (counterValue > 1) {
           return "com repeticao";
-        } 
-      }else {
+        } else if (counterValue === 1) {
           return "sem repeticao";
         }
+      } else {
+        return "sem repeticao";
       }
+    }
   
       async processTypeComplement(typeComplement, complementExpandable, required) {
         const complement = typeComplement !== "" ? typeComplement : "";

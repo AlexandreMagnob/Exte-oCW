@@ -60,7 +60,11 @@ class ScrapyAnotai {
         const counterValue = parseInt(counter.textContent, 10);
         if (counterValue > 1) {
           return "com repeticao";
-        } else {
+        } 
+        else if (counterValue === 1) {
+          return "sem repeticao";
+        }
+        else {
           return "sem repeticao";
         }
       }
