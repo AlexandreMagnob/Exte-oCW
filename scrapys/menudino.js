@@ -15,7 +15,7 @@ class ScrapyDino {
       let maxQtd = ""
 
       if (typeOption && typeOption.classList) {
-        if (typeOption.classList.containfs('radio')) {
+        if (typeOption.classList.contains('radio')) {
           type = "Apenas uma opcao";
           minQtd = 0;
           maxQtd = 1;
@@ -135,7 +135,7 @@ class ScrapyDino {
             productPrice = "0";
           } else {
             // Se for um preço único, extraia o valor normal
-            productPrice = extractSinglePrice(priceText);
+            productPrice = this.extractSinglePrice(priceText);
           }
           let imgSrc = imgElement ? imgElement.src : "";
           let productDescricao = descricaoElement ? descricaoElement.textContent : "";
@@ -181,11 +181,11 @@ class ScrapyDino {
                   
                 } else if (optionElement.classList.contains('pb') && optionElement.classList.contains('pt')) {
                   let optionText = optionElement.textContent.trim();
-                  let regex = /(.+)\(([\d,.]+)\)/;
+                  let regex = /Máx\.\s\d+\s*([\s\S]+?)\s*\+\s*R\$(\d+,\d{2})/;
                   let match = optionText.match(regex);
-                
+
                   optionTitle = match ? match[1].trim() : "";
-                  optionPrice = match ? match[2].replace('.', ',') : "";
+                  optionPrice = match ? match[2] : "";
                   
                   console.log({optionPrice, optionTitle})
                 }
