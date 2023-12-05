@@ -211,7 +211,7 @@ class ScrapyAnotai {
           categoryName: categoryName,
           productsCategory: productData
         });
-        await this.backPage();
+        //await this.backPage();
       }
       //alert("Finalizado!")
   }
