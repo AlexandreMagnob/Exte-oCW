@@ -44,7 +44,7 @@ async function createCSV(data, name) {
           const complementRequired = complementData.required ? 'Obrigatório' : 'Não';
           const complementMinQtd = complementData.minQtd;
           const complementMaxQtd = complementData.maxQtd;
-  
+          
           csvData.push(['Complemento', complementName, '', '', '',  '', '', '', '', complementType, complementMinQtd, complementMaxQtd]);
   
           complementData.options.forEach(option => {
@@ -52,7 +52,8 @@ async function createCSV(data, name) {
             const optionPrice = option.optionPrice;
             //const optionMaxQtd = option.optionQtd;
             const optionDescription = option.optionDescription
-            csvData.push(['Opcao', optionName, optionDescription, optionPrice, '', '', '', '', '', '', '', '']);
+            const optionImg = option.optionImg ? option.optionImg : ""
+            csvData.push(['Opcao', optionName, optionDescription, optionPrice, optionImg, '', '', '', '', '', '', '']);
           });
         });
       });

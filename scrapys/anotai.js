@@ -183,11 +183,14 @@ class ScrapyAnotai {
                   let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
                   //let optionQtd = optionQtdElement ? optionQtdElement.textContent : "";
                   let optionDescription = optionDescriptionElement ? optionDescriptionElement.textContent : "";
-    
+                  let optionImgElement = optionElement.querySelector('img.chooser-info__image');
+                  let optionImg = optionImgElement ? optionImgElement.src : "";
+                  console.log(optionImg)
                   optionsComplement.push({
                     optionTitle: optionTitle,
                     optionPrice: optionPrice,
-                    optionDescription: optionDescription
+                    optionDescription: optionDescription,
+                    optionImg: optionImg
                   });
                 }
     
