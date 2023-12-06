@@ -24,7 +24,12 @@ class ScrapyGoomer {
       let type = "";
       let minQtd = 0;
       let maxQtd = 0;
-    
+      
+      let requiredLabel = complementExpandable.querySelector('[data-test="required-label"]');
+      if (requiredLabel){
+        minQtd = 1
+      }
+
       if (complement.match(/^Escolha (\d+) opções/)) {
         const itemCount = parseInt(complement.match(/^Escolha (\d+) opções/)[1], 10);
         if (itemCount !== 1) {
@@ -50,6 +55,7 @@ class ScrapyGoomer {
         minQtd = minItems;
         maxQtd = maxItems;
       }
+
       return [type, minQtd, maxQtd];
     }
   
@@ -166,14 +172,13 @@ class ScrapyGoomer {
             console.log("Produto adicionado")
             await this.backPage();
           }
-        }
         this.scrapedData.push({
           categoryName: categoryName,
           productsCategory: productData
         });
         console.log("Categoria adicionada")
-        await this.backPage();
       }
+    }
   
   async backPage() {
     console.log("Voltou!")
