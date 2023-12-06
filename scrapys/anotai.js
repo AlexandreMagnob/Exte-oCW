@@ -128,8 +128,13 @@ class ScrapyAnotai {
           if (productCard.style.display === "none") {
             // Se o estilo for "display: none;", pule este productCard
             continue;
-        }
-  
+          }
+          let isSoldOut = productCard.querySelector('.tag-container.out');
+          if (isSoldOut) {
+              console.log("Produto esgotado. Pulando para o próximo.");
+              continue;
+          }
+        
           let innerDiv = productCard.querySelector('.item-card-container.row.justify-between');
           if (innerDiv) {
             await this.sleep(500)
