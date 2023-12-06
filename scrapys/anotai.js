@@ -172,17 +172,20 @@ class ScrapyAnotai {
                   let optionPriceElement = optionElement.querySelector('.price__now');
                   //let optionQtdElement = optionElement.querySelector('span.text-grey-3');
                   let optionDescriptionElement = optionElement.querySelector('.chooser-info__description');
-    
+                  
                   let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
                   let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
                   //let optionQtd = optionQtdElement ? optionQtdElement.textContent : "";
                   let optionDescription = optionDescriptionElement ? optionDescriptionElement.textContent : "";
-    
+                  let optionImgElement = optionElement.querySelector('img.chooser-info__image');
+                  let optionImg = optionImgElement ? optionImgElement.src : "";
+                  console.log(optionImg)
                   optionsComplement.push({
                     optionTitle: optionTitle,
                     optionPrice: optionPrice,
-                    optionDescription: optionDescription
+                    optionDescription: optionDescription,
+                    optionImg: optionImg
                   });
                 }
     

@@ -8,7 +8,14 @@ class ScrapyDino {
     sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)); }
   
     async checkRepetition(complementExpandable){
-        
+        let repetition
+        let chooserDiv = complementExpandable.querySelector('.sc-caXVBt.pzWYu')
+        if(chooserDiv){
+          repetition = " com repeticao"
+        }
+        else{
+          repetition = " sem repeticao"
+        }
         return repetition
     }
 
@@ -23,7 +30,7 @@ class ScrapyDino {
         var regex = /(\d+)\s+de\s+(\d+)/;
         var match = typeText.match(regex);
         var type
-        var repetition = 
+        var repetition = await this.checkRepetition(complementExpandable)
 
         // Atribua os valores a minQtd e maxQtd, ou 0 se não houver correspondência
         minQtd = match ? parseInt(match[1], 10) : 0;
@@ -36,14 +43,14 @@ class ScrapyDino {
       
         console.log({ minQtd, maxQtd });
 
-        if(maxtd>1){
+        if(maxQtd>1){
             type = "Mais de uma opcao" + repetition
         }
         else{
             type = "Apenas uma opcao"
         }
 
-        return [minQtd, maxQtd]
+        return [type, minQtd, maxQtd]
       }
   
       async extractPrice(priceText) {
@@ -74,7 +81,7 @@ class ScrapyDino {
         //Expande a categoria de produtos
         await this.expandCategory(categoryDiv)
   
-        let productCards = categoryDiv.querySelectorAll('.sc-de312e94-3');
+        let productCards = categoryDiv.querySelectorAll('.sc-77dfba53-0.jMrGpH');
   
         console.log(categoryName)
         console.log(productCards.length)
@@ -84,12 +91,12 @@ class ScrapyDino {
           await this.sleep(500)
           let categoryDivs = document.querySelectorAll('.sc-7aaae754-1')
           let categoryDiv = categoryDivs[categoryIndex];
-          let productCards = categoryDiv.querySelectorAll('.sc-de312e94-3');
+          let productCards = categoryDiv.querySelectorAll('.sc-77dfba53-0.jMrGpH');
           let productCard = productCards[productIndex];
           
           console.log({productIndex, productCard})
   
-            let priceElement = productCard.querySelector('.sc-fLlhyt.bNJFxQ');
+            let priceElement = productCard.querySelector('.sc-fLlhyt.bNJFxQ, .sc-fLlhyt.fERYBh')
           
             productCard.scrollIntoView();
             await this.sleep(500)
@@ -110,7 +117,7 @@ class ScrapyDino {
             let productDescricao = descricaoElement ? descricaoElement.textContent : "";
     
             let complementsDict = []
-            let complementExpandables = productModal.querySelectorAll('.sc-bczRLJ.sc-f719e9b0-0')
+            let complementExpandables = productModal.querySelectorAll('.sc-bczRLJ.sc-f719e9b0-0.sc-2815c808-0')
             for await (const complementExpandable of complementExpandables) {
               let complementElements = complementExpandable.querySelectorAll('.sc-bczRLJ.sc-f719e9b0-0.sc-2815c808-1')
               let optionsComplement = [];
