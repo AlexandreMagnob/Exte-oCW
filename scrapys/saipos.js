@@ -48,7 +48,7 @@ class ScrapySaipos {
           
       
         
-        let type = maxQtd > 1 ? "Mais de uma opcao " + repetition : "Apenas uma opcao " + repetition;
+        let type = maxQtd > 1 ? "Mais de uma opcao " + repetition : "Apenas uma opcao ";
       
         return [type, minQtd, maxQtd];
       }
@@ -93,7 +93,7 @@ class ScrapySaipos {
           let productDescricao = descricaoElement ? descricaoElement.textContent : "";
   
           let complementsDict = []
-          let complementExpandables = document.querySelectorAll('div[style="width: 100%;"]:not(.quantity)')
+          let complementExpandables = document.querySelectorAll('div[style="width: 100%;"]:not(.quantity):not(.list_circle_detail)')
 
           for await (const complementExpandable of complementExpandables) {
 
@@ -169,7 +169,7 @@ class ScrapySaipos {
           // console.log("DESCRIÇAO: ", productDescricao)
           console.log("- - - - - - - - - - - - - - - - - ")
           console.log("                                  ")
-          await this.backPage();
+          window.history.go(-1)
           await this.sleep(1000)
         
       }
