@@ -54,19 +54,19 @@ class scrapyInstaDelivery {
       let hasButton = complementExpandable.querySelector('.update-button')
       let repetion
       let type
-      if(Quantity>1){
-        type = "Mais de uma opcao"
-      }
-      else{
-        type = "Apenas uma opcao"
-      }
       if (hasButton){
         repetion = " com repeticao"
       }
       else {
         repetion = " sem repeticao"
       }
-      return type + repetion;
+      if(Quantity>1){
+        type = "Mais de uma opcao " + repetion
+      }
+      else{
+        type = "Apenas uma opcao "
+      }
+      return type
     }
     
     // [*] Função responsável por separar o nome do complemento do seu tipo

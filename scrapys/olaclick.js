@@ -34,24 +34,24 @@ class ScrapyOlaClick {
               if (matchSelect) {
                   const itemCount = parseInt(matchSelect[1], 10);
                   if (itemCount !== 1) {
-                      type = "Mais de uma opção " + repetition;
+                      type = "Mais de uma opcao " + repetition;
                       minQtd = itemCount;
                       maxQtd = itemCount;
                       console.log('minQtd:', minQtd, 'maxQtd:', maxQtd);
                   }
-              } else if (complement === "Selecione 1 opção") {
-                  type = "Apenas uma opção ";
+              } else if (complement === "Selecione 1 opcao") {
+                  type = "Apenas uma opcao ";
                   minQtd = 1;
                   maxQtd = 1;
               } else if (matchSelectUntil) {
               const maxItems = parseInt(matchSelectUntil[1], 10);
               if (maxItems === 1) {
-                  type = "Apenas uma opção " + repetition;
+                  type = "Apenas uma opcao ";
                   minQtd = 0;
                   maxQtd = maxItems;
                   console.log('minQtd:', minQtd, 'maxQtd:', maxQtd);
               } else {
-                  type = "Mais de um opção " + repetition;
+                  type = "Mais de um opcao " + repetition;
                   minQtd = 0;
                   maxQtd = maxItems;
                   console.log('minQtd:', minQtd, 'maxQtd:', maxQtd);
@@ -59,14 +59,14 @@ class ScrapyOlaClick {
           } else if (matchChooseFromTo) {
                   const minItems = parseInt(matchChooseFromTo[1], 10);
                   const maxItems = parseInt(matchChooseFromTo[2], 10);
-                  type = "Mais de uma opção " + repetition;
+                  type = "Mais de uma opcao " + repetition;
                   minQtd = minItems;
                   maxQtd = maxItems;
                   console.log('minQtd:', minQtd, 'maxQtd:', maxQtd);
               } else if (matchSelectMin) {
                   const minItems = parseInt(matchSelectMin[1], 10);
                   const maxItems = parseInt(matchSelectMin[1], 10);
-                  type = "Apenas uma opção " + repetition;
+                  type = "Apenas uma opcao "
                   minQtd = minItems;
                   maxQtd = maxItems
                   console.log('minQtd:', minQtd, 'maxqtd', maxQtd);

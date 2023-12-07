@@ -83,7 +83,7 @@ class scrapyYooga {
           }
         
         
-          let type = maxQtd > 1 ? "Mais de uma opcao " + repetition : "Apenas uma opcao " + repetition;
+          let type = maxQtd > 1 ? "Mais de uma opcao " + repetition : "Apenas uma opcao ";
         
           return [type, minQtd, maxQtd];
         }

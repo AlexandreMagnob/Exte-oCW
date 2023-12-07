@@ -23,7 +23,7 @@ class scrapyHubt {
             if(!typeComplement == ""){
             let { repetition } = await this.checkRepetition(complementExpandable);
             console.log('repetition:', repetition);
-            type = "Apenas uma opção " + repetition;
+            type = "Apenas uma opcao ";
             minQtd = 1;
             maxQtd = 1;
       
