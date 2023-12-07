@@ -52,7 +52,8 @@ async function createCSV(data, name) {
             const optionPrice = option.optionPrice;
             //const optionMaxQtd = option.optionQtd;
             const optionDescription = option.optionDescription
-            csvData.push(['Opcao', optionName, optionDescription, optionPrice, '', '', '', '', '', '', '', '']);
+            const optionImg = option.optionImg ? option.optionImg : ""
+            csvData.push(['Opcao', optionName, optionDescription, optionPrice, optionImg, '', '', '', '', '', '', '']);
           });
         });
       });
