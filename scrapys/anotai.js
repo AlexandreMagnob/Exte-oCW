@@ -128,8 +128,13 @@ class ScrapyAnotai {
           if (productCard.style.display === "none") {
             // Se o estilo for "display: none;", pule este productCard
             continue;
-        }
-  
+          }
+          let isSoldOut = productCard.querySelector('.tag-container.out');
+          if (isSoldOut) {
+              console.log("Produto esgotado. Pulando para o próximo.");
+              continue;
+          }
+        
           let innerDiv = productCard.querySelector('.item-card-container.row.justify-between');
           if (innerDiv) {
             await this.sleep(500)
@@ -178,11 +183,14 @@ class ScrapyAnotai {
                   let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')
                   //let optionQtd = optionQtdElement ? optionQtdElement.textContent : "";
                   let optionDescription = optionDescriptionElement ? optionDescriptionElement.textContent : "";
-    
+                  let optionImgElement = optionElement.querySelector('img.chooser-info__image');
+                  let optionImg = optionImgElement ? optionImgElement.src : "";
+                  console.log(optionImg)
                   optionsComplement.push({
                     optionTitle: optionTitle,
                     optionPrice: optionPrice,
-                    optionDescription: optionDescription
+                    optionDescription: optionDescription,
+                    optionImg: optionImg
                   });
                 }
     
