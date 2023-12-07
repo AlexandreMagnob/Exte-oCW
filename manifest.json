@@ -27,7 +27,8 @@
         "https://instadelivery.com.br/*",
         "https://www.hubt.com.br/*",
         "https://app.jotaja.com/*",
-        "https://*.yooga.app/*"
+        "https://*.yooga.app/*",
+        "https://*.saipos.com/*"
       ],
       "js": [
         "papaparse.min.js",
@@ -39,6 +40,7 @@
         "scrapys/hubt.js",
         "scrapys/jotaja.js",
         "scrapys/yooga.js",
+        "scrapys/saipos.js",
         "handlerScrapy.js",
         "sheet_generation.js"
       ],

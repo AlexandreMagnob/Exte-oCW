@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
       { urlPattern: /^https:\/\/instadelivery\.com\.br\/.*/, value: "InstaDelivery" },
       { urlPattern: /^https:\/\/www\.hubt\.com\.br\/.*/, value: "Hubt" },
       { urlPattern: /^https:\/\/app\.jotaja\.com\/.*/, value: "Jotaja" },
-      { urlPattern: /^https:\/\/.*\.yooga\.app\/.*/, value: "Yooga" }
+      { urlPattern: /^https:\/\/.*\.saipos\.com\/.*/, value: "Saipos" }
     ];
 
     const matchingSite = sites.find(site => url.match(site.urlPattern));

@@ -9,6 +9,7 @@ class HandlerScrapy {
       this.scrapyHubt = new scrapyHubt();
       this.scrapyJotaja = new scrapyJotaja();
       this.scrapyYooga = new scrapyYooga();
+      this.ScrapySaipos = new ScrapySaipos();
     }
   
     async handleScrapyChoice(restaurante) {
@@ -70,6 +71,14 @@ class HandlerScrapy {
         const scrapedData = this.scrapyOlaClick.scrapedData
         await alert("Finalizado")
         const titleRestaurant = this.scrapyOlaClick.titleRestaurant
+        await createCSV(scrapedData, titleRestaurant)
+      }
+      else if (restaurante === 'Saipos') {
+        await alert("Iniciando...");
+        await this.ScrapySaipos.clickProductCards()
+        const scrapedData = this.ScrapySaipos.scrapedData
+        await alert("Finalizado")
+        const titleRestaurant = this.ScrapySaipos.titleRestaurant
         await createCSV(scrapedData, titleRestaurant)
       }
       else if (restaurante === 'InstaDelivery') {
