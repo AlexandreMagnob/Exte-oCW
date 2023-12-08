@@ -177,7 +177,7 @@ class ScrapyAnotai {
                   let optionPriceElement = optionElement.querySelector('.price__now');
                   //let optionQtdElement = optionElement.querySelector('span.text-grey-3');
                   let optionDescriptionElement = optionElement.querySelector('.chooser-info__description');
-    
+                  
                   let optionTitle = optionTitleElement ? optionTitleElement.textContent : "";
                   let optionPriceText = optionPriceElement ? optionPriceElement.textContent : "0";
                   let optionPrice = optionPriceText.replace(/[^\d,.]/g, '').replace('.', ',')

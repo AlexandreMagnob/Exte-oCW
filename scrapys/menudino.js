@@ -80,7 +80,7 @@ class ScrapyDino {
 
   async clickProductCards() {
 
-    this.titleRestaurant = (document.title || {}).textContent || '';
+    this.titleRestaurant = document.title || '';
 
     console.log("executando..")
     await this.sleep(500)
