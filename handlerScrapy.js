@@ -1,7 +1,7 @@
 class HandlerScrapy {
     constructor() {
       // Inicializa as instâncias dos scrapers
-      this.scrapyDino = new ScrapyDino();
+      this.scrapyDino = new scrapyDino();
       this.scrapyAnotai = new ScrapyAnotai();
       this.scrapyGoomer = new ScrapyGoomer();
       this.scrapyOlaClick = new ScrapyOlaClick();
@@ -10,6 +10,7 @@ class HandlerScrapy {
       this.scrapyJotaja = new scrapyJotaja();
       this.scrapyYooga = new scrapyYooga();
       this.scrapyCardapioDigital = new scrapyCardapioDigital();
+      this.scrapySaipos = new scrapySaipos();
     }
   
     async handleScrapyChoice(restaurante) {
@@ -80,6 +81,14 @@ class HandlerScrapy {
         const scrapedData = this.scrapyOlaClick.scrapedData
         await alert("Finalizado")
         const titleRestaurant = this.scrapyOlaClick.titleRestaurant
+        await createCSV(scrapedData, titleRestaurant)
+      }
+      else if (restaurante === 'Saipos') {
+        await alert("Iniciando...");
+        await this.scrapySaipos.clickProductCards()
+        const scrapedData = this.scrapySaipos.scrapedData
+        await alert("Finalizado")
+        const titleRestaurant = this.scrapySaipos.titleRestaurant
         await createCSV(scrapedData, titleRestaurant)
       }
       else if (restaurante === 'InstaDelivery') {

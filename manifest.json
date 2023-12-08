@@ -28,7 +28,8 @@
         "https://www.hubt.com.br/*",
         "https://app.jotaja.com/*",
         "https://*.yooga.app/*",
-        "https://*.cardapiodigital.io/*"
+        "https://*.cardapiodigital.io/*",
+        "https://*.saipos.com/*"
       ],
       "js": [
         "papaparse.min.js",
@@ -41,6 +42,7 @@
         "scrapys/jotaja.js",
         "scrapys/yooga.js",
         "scrapys/cardapiodigital.js",
+        "scrapys/saipos.js",
         "handlerScrapy.js",
         "sheet_generation.js"
       ],

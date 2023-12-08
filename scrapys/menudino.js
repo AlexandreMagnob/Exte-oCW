@@ -1,5 +1,5 @@
 
-class ScrapyDino {
+class scrapyDino {
   constructor() {
     this.scrapedData = [];
     this.titleRestaurant = ""

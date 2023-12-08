@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
       { urlPattern: /^https:\/\/app\.jotaja\.com\/.*/, value: "Jotaja" },
       { urlPattern: /^https:\/\/.*\.yooga\.app\/.*/, value: "Yooga" },
       { urlPattern: /^https:\/\/.*\.cardapiodigital\.io\/.*/, value: "CardapioDigital" },
+      { urlPattern: /^https:\/\/.*\.saipos\.com\/.*/, value: "Saipos" }
     ];
 
     const matchingSite = sites.find(site => url.match(site.urlPattern));
