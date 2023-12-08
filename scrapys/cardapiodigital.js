@@ -61,7 +61,7 @@ class scrapyCardapioDigital {
       
           if (matches && matches.length > 0) {
             // Verifica se há correspondências antes de acessar a posição 0
-            const price = parseFloat(matches[0].replace(',', '.'));
+            const price = parseFloat(matches[0].replace('.', ','));
             return price;
           } else {
             return 0; // Retorna 0 se nenhuma correspondência for encontrada
@@ -72,7 +72,7 @@ class scrapyCardapioDigital {
   
     async clickProductCards() {
   
-      this.titleRestaurant = (document.title || {}).textContent || '';
+      this.titleRestaurant = document.title || '';
   
       console.log("executando..")
       await this.sleep(500)
@@ -87,13 +87,13 @@ class scrapyCardapioDigital {
     
   
         let productCards = categoryDiv.querySelectorAll('.sc-de312e94-3, .sc-77dfba53-0.jMrGpH');
-        console.log(categoryName)
-        console.log(productCards)
+        console.log(categoryName);
+        console.log(productCards);
         
         let productData = [];
         for await (const productIndex of [...Array(productCards.length).keys()]) {
-          await this.sleep(500)
-          let categoryDivs = document.querySelectorAll('.sc-7aaae754-1')
+          await this.sleep(500);
+          let categoryDivs = document.querySelectorAll('.sc-7aaae754-1');
           let categoryDiv = categoryDivs[categoryIndex];
           let productCards = categoryDiv.querySelectorAll('.sc-de312e94-3, .sc-77dfba53-0.jMrGpH');
 
