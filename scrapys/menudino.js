@@ -111,7 +111,7 @@ class scrapyDino {
         
         console.log({productIndex, productCard})
 
-        let priceElement = productCard.querySelector('.price');
+        
         
         productCard.scrollIntoView();
         let innerDiv = productCard.querySelector('.product-item');
@@ -126,6 +126,7 @@ class scrapyDino {
           console.log(titleElement)
           let imgElement = productModal.querySelector('#produtoModalImagePath');
           let descricaoElement = productModal.querySelector('#produtoModalDescricao')
+          let priceElement = productModal.querySelector('.show');
           let productTitle = titleElement ? titleElement.textContent : "";
           console.log(productTitle)
           let priceText = priceElement ? priceElement.textContent : "";
@@ -179,16 +180,20 @@ class scrapyDino {
                   
                   console.log({optionPrice, optionTitle})
                   
-                } else if (optionElement.classList.contains('pb') && optionElement.classList.contains('pt')) {
-                  let optionText = optionElement.textContent.trim();
-                  let regex = /Máx\.\s\d+\s*([\s\S]+?)\s*\+\s*R\$(\d+,\d{2})/;
-                  let match = optionText.match(regex);
-
-                  optionTitle = match ? match[1].trim() : "";
-                  optionPrice = match ? match[2] : "";
-                  
-                  console.log({optionPrice, optionTitle})
-                }
+                } else if (optionElement && optionElement.classList.contains('pb') && optionElement.classList.contains('pt')) {
+                  // Encontrando a tag <b> dentro do elemento
+                  const bTag = optionElement.querySelector('b');
+                  if (bTag) {
+                      // Obtendo o preço do texto dentro da tag <b>
+                      const priceRegex = /R\$(\d+,\d{2})/;
+                      const priceMatch = bTag.textContent.match(priceRegex);
+                      optionPrice = priceMatch ? priceMatch[1] : "";
+              
+                      // Obtendo o título (todo o texto que não está dentro da tag <b>)
+                      optionTitle = optionElement.textContent.replace(bTag.textContent, "").trim();
+                      console.log({optionPrice, optionTitle})
+                  }
+              }
                 else if (optionElement.classList.contains('checkbox')) {
                   // Se a classe for 'checkbox', trata como um checkbox.
                   let optionLabelElement = optionElement.querySelector('label');

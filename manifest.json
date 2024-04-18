@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "CW Scrapy",
+  "name": "CW Scrapy Funcionarios",
   "version": "1.0.1",
   "description": "Web Scrapy da Cardápio Web para criação de listas",
   "permissions": [
@@ -29,7 +29,8 @@
         "https://app.jotaja.com/*",
         "https://*.yooga.app/*",
         "https://*.cardapiodigital.io/*",
-        "https://*.saipos.com/*"
+        "https://*.saipos.com/*",
+        "https://deliveryapp.neemo.com.br/*"
       ],
       "js": [
         "papaparse.min.js",
@@ -43,6 +44,7 @@
         "scrapys/yooga.js",
         "scrapys/cardapiodigital.js",
         "scrapys/saipos.js",
+        "scrapys/neemo.js",
         "handlerScrapy.js",
         "sheet_generation.js"
       ],

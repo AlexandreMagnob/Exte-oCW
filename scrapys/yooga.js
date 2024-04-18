@@ -132,7 +132,7 @@ class scrapyYooga {
             let complementsDict = []
             let complementExpandables = document.querySelectorAll('.sticky-choice-element.md.hydrated');
             for await (const complementExpandable of complementExpandables) {
-              let complementElements = complementExpandable.querySelectorAll('.choice-header.px-4.md.hydrated');
+              let complementElements = complementExpandable.querySelectorAll('.choice-header.md.hydrated');
               let optionsComplement = [];
     
               // Pegar o nome de cada complemento

@@ -11,6 +11,7 @@ class HandlerScrapy {
       this.scrapyYooga = new scrapyYooga();
       this.scrapyCardapioDigital = new scrapyCardapioDigital();
       this.scrapySaipos = new scrapySaipos();
+      this.scrapyNeemo = new scrapyNeemo();
     }
   
     async handleScrapyChoice(restaurante) {
@@ -40,11 +41,11 @@ class HandlerScrapy {
         const titleRestaurant = this.scrapyYooga.titleRestaurant
         await createCSV(scrapedData, titleRestaurant)
       }
-      else if(restaurante == "JotaJa")
+      else if(restaurante == "Jotaja")
       {
         await alert("Iniciando...");
         await this.scrapyJotaja.clickProductCards()
-        const scrapedData = this.scrapyJotaj.scrapedData
+        const scrapedData = this.scrapyJotaja.scrapedData
         await alert("Finalizado")
         const titleRestaurant = this.scrapyJotaja.titleRestaurant
         await createCSV(scrapedData, titleRestaurant)
@@ -89,6 +90,14 @@ class HandlerScrapy {
         const scrapedData = this.scrapySaipos.scrapedData
         await alert("Finalizado")
         const titleRestaurant = this.scrapySaipos.titleRestaurant
+        await createCSV(scrapedData, titleRestaurant)
+      }
+      else if (restaurante === 'Neemo') {
+        await alert("Iniciando...");
+        await this.scrapyNeemo.clickProductCards()
+        const scrapedData = this.scrapyNeemo.scrapedData
+        await alert("Finalizado")
+        const titleRestaurant = this.scrapyNeemo.titleRestaurant
         await createCSV(scrapedData, titleRestaurant)
       }
       else if (restaurante === 'InstaDelivery') {

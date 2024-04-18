@@ -4,7 +4,7 @@ class ScrapyGoomer {
       this.scrapedData = [];
       this.titleRestaurant = ""
       
-    }
+    } 
   
     sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)); }
     

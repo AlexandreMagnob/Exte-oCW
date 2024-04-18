@@ -9,31 +9,32 @@ class scrapyJotaja {
     sleep(ms) {     return new Promise(resolve => setTimeout(resolve, ms)); }
   
     
-      async waitForElement(selector,context) {
-        if(context){
-          return new Promise(resolve => {
-            const intervalId = setInterval(() => {
-              const element = context.querySelector(selector);
-              if (element) {
-                clearInterval(intervalId);
-                resolve(element);
-              }
-            }, 1000);
-          });
-        }
-        else{
-          return new Promise(resolve => {
-            const intervalId = setInterval(() => {
-              const element = document.querySelector(selector);
-              if (element) {
-                clearInterval(intervalId);
-                resolve(element);
-              }
-            }, 1000);
-          });
+    async waitForElement(selector, context) {
+      const timeout = 4000; // Set the timeout to 4 seconds (4000 milliseconds)
+    
+      return new Promise((resolve, reject) => {
+        let intervalId;
+    
+        const clearAndReject = () => {
+          clearInterval(intervalId);
+          reject(false);
         };
-
-      }async waitForElementAll(context,selector) {
+    
+        intervalId = setInterval(() => {
+          const element = context ? context.querySelector(selector) : document.querySelector(selector);
+          if (element) {
+            clearInterval(intervalId);
+            resolve(element);
+          }
+        }, 1000);
+    
+        // Set a timeout to reject the promise if the element is not found within the specified time
+        setTimeout(clearAndReject, timeout);
+      });
+    }
+    
+      
+      async waitForElementAll(context,selector) {
         if(context){
           return new Promise(resolve => {
             const intervalId = setInterval(() => {
@@ -280,7 +281,7 @@ class scrapyJotaja {
 
   async closeModal() {
     await this.sleep(1000);
-    let modalElement = await this.waitForElement('.modal_boxModal__820K1');
+    let modalElement = document.querySelector('.modal_boxModal__820K1');
 
     if (modalElement) {
       modalElement.style.display = 'none';
